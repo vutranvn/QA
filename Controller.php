@@ -35,8 +35,8 @@ class Controller extends \Piwik\Plugin\Controller
     {
         Piwik::checkUserHasSomeViewAccess();
 
-        $date   = Common::getRequestVar('date', 'today');
-        $period = Common::getRequestVar('period', 'day');
+//        $date   = Common::getRequestVar('date', 'today');
+//        $period = Common::getRequestVar('period', 'day');
 
         $view = new View("@QualityAssurance/index");
 
@@ -48,15 +48,15 @@ class Controller extends \Piwik\Plugin\Controller
         $view->autoRefreshTodayReport = 0;
         // if the current date is today, or yesterday,
         // in case the website is set to UTC-12), or today in UTC+14, we refresh the page every 5min
-        if (in_array($date, array('today', date('Y-m-d'),
-            'yesterday', Date::factory('yesterday')->toString('Y-m-d'),
-            Date::factory('now', 'UTC+14')->toString('Y-m-d')))
-        ) {
-            $view->autoRefreshTodayReport = Config::getInstance()->General['multisites_refresh_after_seconds'];
-        }
+//        if (in_array($date, array('today', date('Y-m-d'),
+//            'yesterday', Date::factory('yesterday')->toString('Y-m-d'),
+//            Date::factory('now', 'UTC+14')->toString('Y-m-d')))
+//        ) {
+//            $view->autoRefreshTodayReport = Config::getInstance()->General['multisites_refresh_after_seconds'];
+//        }
 
         $params = $this->getGraphParamsModified();
-        $view->dateSparkline = $period == 'range' ? $date : $params['date'];
+//        $view->dateSparkline = $period == 'range' ? $date : $params['date'];
 
         // Widget bandwidth
 		$lastMinutes = 2;
@@ -74,10 +74,7 @@ class Controller extends \Piwik\Plugin\Controller
 		$view->refreshAfterXSecs = 5;
 
         $overview = array(
-            'audience',
-//            'startup_time',
-//            'bit_rate',
-//            'rebuffer_time'
+            'audience'
         );
         $view->graphOverview = $this->getGraphOverview(array(), $overview);
 

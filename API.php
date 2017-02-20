@@ -5,7 +5,6 @@ namespace Piwik\Plugins\QualityAssurance;
 use Piwik\Common;
 use Piwik\DataTable;
 use Piwik\Piwik;
-use Piwik\Site;
 use Piwik\Metrics\Formatter;
 use Piwik\API\Request;
 use Piwik\FrontController;
@@ -33,9 +32,6 @@ class API extends \Piwik\Plugin\API
 		$format = 'JSON';
 		$token_auth = Piwik::getCurrentUserTokenAuth();
 
-		echo "<pre>";
-			var_dump('idSites: ', $idSites);
-		echo "</pre>";
 		/**
 		 * Get api in multi idSites
 		 */
@@ -92,56 +88,78 @@ class API extends \Piwik\Plugin\API
 
 	public function getGraphEvolution($idSite, $date, $period, $columns = false)
 	{
-		$date   = !$date?Common::getRequestVar('date', date("Y-m-d")):date("Y-m-d");
-		$period = !$period?Common::getRequestVar('period', 'day'):'day';
-
-//		$columns = array(
-//			'audience',
-//			'startup_time',
-//			'bit_rate',
-//			'rebuffer_time',
-//		);
 		if ( empty($columns) ) {
 			$columns = array(
 				'audience',
 			);
 		}
 
-		$end    = date("Y-m-d");
-		$from   = date('Y-m-d',(strtotime ( '-30 days', strtotime($end)) ));
+		$format = 'JSON';
+		$token_auth = Piwik::getCurrentUserTokenAuth();
+		$idSites = $this->idSites;
+		$tDate      = $date;
+		$tPeriod    = $period;
 
-		$graphData = array();
-		for( $from; $from <= $end; $from=date('Y-m-d', (strtotime ( '+1 day', strtotime($from)))) ) {
-			foreach ( $columns as $column ) {
-				$graphData[ $from ][ $column ] = rand( 1000, 10000);
+		$result = array();
+		foreach ($idSites as $idSite) {
+			if ( in_array('audience', $columns)) {
+				$rByIdSite = $this->callHttpApiRequest('VisitsSummary.getUniqueVisitors', $format, $token_auth, $idSite, $tDate, $tPeriod);
+				$rByIdSite = json_decode($rByIdSite, true);
+
+				foreach ($rByIdSite as $date => $val) {
+					if (isset($result[$date])) {
+						$result[$date] += (int)$val;
+					} else {
+						$result[$date] = $val;
+					}
+				}
+			} else {
+				$result = $this->callHttpApiRequest('Events.getAction', $format, $token_auth, $idSite, $date, 'day');
 			}
+
+//            if ( !$eventsActions ) {
+//                $eventsActions = json_decode($eventsActions, true);
+//                foreach ($eventsActions as $action) {
+//                    if ( $action['label'] == 'start-delay' ) {
+//                        $startup_time[] = $action['avg_event_value'];
+//                    }
+//
+//                    if ( $action['label'] == 'rebuffer-time' ) {
+//                        $buffer_time[] = $action['avg_event_value'];
+//                    }
+//
+//                    if ( $action['label'] == 'bitrate' ) {
+//                        $bitrate[] = $action['avg_event_value'];
+//                    }
+//                }
+//            }
 		}
-		/**
-		 * Make data like
-		 *
-		 * array (
-		 *      "2016-07-17" => array ( "request_count_200" => X, "request_count_500" => Y ),
-		 *      "2016-07-18" => array ( "request_count_200" => X, "request_count_500" => Y ),
-		 *      "2016-07-19" => array ( "request_count_200" => X, "request_count_500" => Y )
-		 * )
-		 */
 
-		ksort($graphData);
-
-		return DataTable::makeFromIndexedArray($graphData);
+		return DataTable::makeFromIndexedArray($result);
 	}
 
 	public function getFor($idSite, $period, $date, $segment = false)
 	{
+        $idSites = $this->idSites;
+        $format = 'JSON';
+        $token_auth = Piwik::getCurrentUserTokenAuth();
+        $result = array();
+        foreach ($idSites as $idSite) {
+            $idSubtable = $this->callHttpApiRequest('Events.getCategory', $format, $token_auth, $idSite, $date, $period);
+            $idSubtable = json_decode($idSubtable, true);
+            if(isset($idSubtable['lable']) == 'MediaFormat') {
+                $idSubtable = $idSubtable['idsubdatatable'];
+                $rByIdSite = $this->callHttpApiRequest('Events.getActionFromCategoryId', $format, $token_auth, $idSite, $date, $period, $idSubtable);
+                $rByIdSite = json_decode($rByIdSite, true);
 
-		$metrics = array(
-			'avi',
-			'mp4',
-			'flv',
-		);
-		$result = $this->getDataExamples( $metrics );
+                foreach ($rByIdSite as $val) {
+                    $result[$val['lable']] = $val['nb_visits'];
+                }
+            }
 
-		return $result;
+        }
+
+        return DataTable::makeFromIndexedArray($result);
 	}
 
 	public function getCon($idSite, $period, $date, $segment = false)
@@ -162,16 +180,26 @@ class API extends \Piwik\Plugin\API
 	public function getCat($idSite, $period, $date, $segment = false)
 	{
 
-		$metrics = array(
-			'Sport',
-			'Comedy‎',
-			'Game show',
-			'Talk show',
-			'Music',
-		);
-		$result = $this->getDataExamples( $metrics, 0, 40 );
+        $idSites = $this->idSites;
+        $format = 'JSON';
+        $token_auth = Piwik::getCurrentUserTokenAuth();
+        $result = array();
+        foreach ($idSites as $idSite) {
+            $idSubtable = $this->callHttpApiRequest('Events.getCategory', $format, $token_auth, $idSite, $date, $period);
+            $idSubtable = json_decode($idSubtable, true);
+            if(isset($idSubtable['lable']) == 'MediaContentCategories') {
+                $idSubtable = $idSubtable['idsubdatatable'];
+                $rByIdSite = $this->callHttpApiRequest('Events.getActionFromCategoryId', $format, $token_auth, $idSite, $date, $period, $idSubtable);
+                $rByIdSite = json_decode($rByIdSite, true);
 
-		return $result;
+                foreach ($rByIdSite as $val) {
+                    $result[$val['lable']] = $val['nb_visits'];
+                }
+            }
+
+        }
+
+        return DataTable::makeFromIndexedArray($result);
 	}
 
 	public function getCountry($idSite, $period, $date, $segment = false)
@@ -216,7 +244,7 @@ class API extends \Piwik\Plugin\API
 		return DataTable::makeFromIndexedArray($graphData);
 	}
 
-	private function callHttpApiRequest($method, $format, $token_auth, $idSite = false, $date = false, $period = false)
+	private function callHttpApiRequest($method, $format, $token_auth, $idSite = false, $date = false, $period = false, $idSubtable = false)
 	{
 		$url = 'module=API&method='.$method;
 		if ( $idSite ) {
@@ -227,6 +255,9 @@ class API extends \Piwik\Plugin\API
 		}
 		if ( $period ) {
 			$url .= '&period='.$period;
+		}
+		if ( $idSubtable ) {
+			$url .= '&idSubtable='.$idSubtable;
 		}
 		$url .= '&format='.$format.'&token_auth='.$token_auth;
 		$request = new Request($url);
