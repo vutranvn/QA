@@ -1,99 +1,155 @@
 {% extends 'dashboard.twig' %}
 
 {% block topcontrols %}
-    {% include "@QualityAssurance/_title.twig" %}
-    {% include "@CoreHome/_periodSelect.twig" %}
-    {#{% include "@QualityAssurance/_selectTimeReresh.twig" %}#}
-    {% include "@CoreHome/_headerMessage.twig" %}
+	{% include "@QualityAssurance/_title.twig" %}
+	{% include "@CoreHome/_periodSelect.twig" %}
+	{#{% include "@QualityAssurance/_selectTimeReresh.twig" %}#}
+	{% include "@CoreHome/_headerMessage.twig" %}
 {% endblock %}
 
 {% block content %}
 <div class="container" id="stream_analyzer">
 
-    <div id="main">
-        <div class="col-md-12 row-block row-one">
-            <div class="row btn-group">
-                <div class="col-md-3 block-btn btn btn-danger sparkline linked" data-src="?date=2017-01-31&module=QualityAssurance&action=getGraphEvolution&idSite=1&period=month&columns=audience">
-                    <script type="text/javascript">$(function() { piwik.initSparklines(); });</script>
-                    <span>Audience Size</span>
-                    <div class="widgetContent ng-scope">
-                        <div class='overview-widget-ausize-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
-                            <div class='overview-widget-ausize-counter' title="{{ audience_size }}{{ ' per second'|translate(lastMinutes) | raw }}">
-                                <div>{{ audience_size }}</div>
-                            </div>
-                        </div>
-                        <script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOne();});</script>
-                    </div>
-                </div>
+	<div id="main">
+		<div class="col-md-12 row-block row-one">
+			<div class="row btn-group text-center">
+				<div class="col-md-3 block-btn btn btn-danger click-me" data-src="{{ urlSparklineAudience }}">
+					<span>Audience Size</span>
+					<div class="widgetContent ng-scope">
+						<div class='overview-widget-ausize-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
+							<div class='overview-widget-ausize-counter' title="{{ audience_size }}{{ ' per second'|translate(lastMinutes) | raw }}">
+								<div>{{ audience_size }}</div>
+							</div>
+						</div>
+						<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOne();});</script>
+					</div>
+				</div>
 
-                <div class="col-md-3 block-btn btn btn-warning data-src="?date=2017-01-31&module=QualityAssurance&action=getGraphEvolution&idSite=1&period=month&columns=startup_time"">
-                    <script type="text/javascript">$(function() { piwik.initSparklines(); });</script>
-                    <span>Start Up Time</span>
-                    <div class="widgetContent ng-scope">
-                        <div class='overview-widget-startup_time-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
-                            <div class='overview-widget-startup_time-counter' title="{{ startup_time }}{{ ' per second'|translate(lastMinutes) | raw }}">
-                                <div>{{ startup_time }}</div>
-                            </div>
-                        </div>
-                        <script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneSU();});</script>
-                    </div>
-                </div>
+				<div class="col-md-3 block-btn btn btn-warning click-me" data-src="{{ urlSparklineStartup }}">
+					<span>Start Up Time</span>
+					<div class="widgetContent ng-scope">
+						<div class='overview-widget-startup_time-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
+							<div class='overview-widget-startup_time-counter' title="{{ startup_time }}{{ ' per second'|translate(lastMinutes) | raw }}">
+								<div>{{ startup_time }}</div>
+							</div>
+						</div>
+						<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneSU();});</script>
+					</div>
+				</div>
 
-                {#<div class="col-md-3 block-btn btn btn-warning">#}
-                    {#<span>Bitrate</span>#}
-                    {#<div class="widgetContent ng-scope">#}
-                        {#<div class='overview-widget-bitrate-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">#}
-                            {#<div class='overview-widget-bitrate-counter' title="{{ bitrate }}{{ ' per second'|translate(lastMinutes) | raw }}">#}
-                                {#<div>{{ bitrate }}</div>#}
-                            {#</div>#}
-                        {#</div>#}
-                        {#<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneBR();});</script>#}
-                    {#</div>#}
-                {#</div>#}
+				{#<div class="col-md-3 block-btn btn btn-warning">#}
+					{#<span>Bitrate</span>#}
+					{#<div class="widgetContent ng-scope">#}
+						{#<div class='overview-widget-bitrate-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">#}
+							{#<div class='overview-widget-bitrate-counter' title="{{ bitrate }}{{ ' per second'|translate(lastMinutes) | raw }}">#}
+								{#<div>{{ bitrate }}</div>#}
+							{#</div>#}
+						{#</div>#}
+						{#<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneBR();});</script>#}
+					{#</div>#}
+				{#</div>#}
 
-                <div class="col-md-3 block-btn btn btn-warning">
-                    <span>Buffer Time</span>
-                    <div class="widgetContent ng-scope">
-                        <div class='overview-widget-buffer_time-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
-                            <div class='overview-widget-buffer_time-counter' title="{{ buffer_time }}{{ ' per second'|translate(lastMinutes) | raw }}">
-                                <div>{{ buffer_time }}</div>
-                            </div>
-                        </div>
-                        <script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneBT();});</script>
-                    </div>
-                </div>
-            </div>
-        </div>
+				<div class="col-md-3 block-btn btn btn-warning click-me" data-src="{{ urlSparklineRebuffer }}">
+					<span>Buffer Time</span>
+					<div class="widgetContent ng-scope">
+						<div class='overview-widget-buffer_time-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
+							<div class='overview-widget-buffer_time-counter' title="{{ buffer_time }}{{ ' per second'|translate(lastMinutes) | raw }}">
+								<div>{{ buffer_time }}</div>
+							</div>
+						</div>
+						<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneBT();});</script>
+					</div>
+				</div>
+			</div>
+		</div>
 
-        <div class="col-md-12 row-block block-border row-two">
-            {{ graphOverview|raw }}
-        </div>
-        <div class="col-md-12 row-block row-three">
-            <div class="row">
-                <div class="col-md-6 block-border">
-                    <h3>{{ 'QualityAssurance_AudienceByFormat'|translate }}</h3>
-                    {% include "@QualityAssurance/_for.twig" %}
-                </div>
-                <div class="col-md-6 block-border">
-                    <h3>{{ 'QualityAssurance_AudienceByGeoraphy'|translate }}</h3>
-                    {{ audienceOfGeo|raw }}
-                    {#{% include "@QualityAssurance/_map.twig" %}#}
-                </div>
-            </div>
-        </div>
+		<div class="col-md-12 row-block block-border row-two">
+			<h2 style="visibility: hidden" data-graph-id="QualityAssurance.graphOverview"></h2>
+			{{ graphOverview|raw }}
+		</div>
 
-        <div class="col-md-12 row-block row-four">
-            <div class="row">
-                <div class="col-md-6 block-border">
-                    <h3>{{ 'QualityAssurance_AudienceByCategory'|translate }}</h3>
-                    {% include "@QualityAssurance/_cat.twig" %}
-                </div>
-                <div class="col-md-6 block-border">
-                    <h3>{{ 'QualityAssurance_AudienceByConnection'|translate }}</h3>
-                    {% include "@QualityAssurance/_con.twig" %}
-                </div>
-            </div>
-        </div>
-    </div>
+		<script type="text/javascript">
+			$(function() { initializeGraphOverview(); });
+			window.initializeGraphOverview = function () {
+				var sparklineUrlParamsToIgnore = ['module', 'action', 'idSite', 'period', 'date', 'viewDataTable'];
+
+				$("[data-graph-id]").each(function () {
+					var graph = $(this);
+
+					// try to find sparklines and add them clickable behaviour
+					graph.parent().parent().find('div.click-me').each(function () {
+
+						// find the sparkline and get it's src attribute
+						var sparklineUrl = $(this).attr('data-src');
+
+						if (sparklineUrl != "") {
+							var params = broadcast.getValuesFromUrl(sparklineUrl);
+							for (var i = 0; i != sparklineUrlParamsToIgnore.length; ++i) {
+								delete params[sparklineUrlParamsToIgnore[i]];
+							}
+							for (var key in params) {
+								if (typeof params[key] == 'undefined') {
+									// this happens for example with an empty segment parameter
+									delete params[key];
+								} else {
+									params[key] = decodeURIComponent(params[key]);
+								}
+							}
+
+							// on click, reload the graph with the new url
+							$(this).off('click.click-me');
+							$(this).on('click.click-me', function () {
+								var reportId = graph.attr('data-graph-id'),
+									dataTable = $(require('piwik/UI').DataTable.getDataTableByReport(reportId));
+								console.log(reportId,dataTable);
+								// when the metrics picker is used, the id of the data table might be updated (which is correct behavior).
+								// for example, in goal reports it might change from GoalsgetEvolutionGraph to GoalsgetEvolutionGraph1.
+								// if this happens, we can't find the graph using $('#'+idDataTable+"Chart");
+								// instead, we just use the first evolution graph we can find.
+								if (dataTable.length == 0) {
+									if ($(this).closest('.widget').length) {
+										dataTable = $(this).closest('.widget').find('div.dataTableVizEvolution');
+									} else {
+										dataTable = $('div.dataTableVizEvolution');
+									}
+								}
+
+								// reload the datatable w/ a new column & scroll to the graph
+								dataTable.trigger('reload', params);
+							});
+						}
+					});
+				});
+			};
+		</script>
+
+		<div class="col-md-12 row-block row-three">
+			<div class="row">
+				<div class="col-md-6 block-border">
+					<h3>{{ 'QualityAssurance_AudienceByFormat'|translate }}</h3>
+					{% include "@QualityAssurance/_for.twig" %}
+				</div>
+				<div class="col-md-6 block-border">
+					<h3>{{ 'QualityAssurance_AudienceByGeoraphy'|translate }}</h3>
+					{{ audienceOfGeo|raw }}
+					{#{% include "@QualityAssurance/_map.twig" %}#}
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-12 row-block row-four">
+			<div class="row">
+				<div class="col-md-6 block-border">
+					<h3>{{ 'QualityAssurance_AudienceByCategory'|translate }}</h3>
+					{% include "@QualityAssurance/_cat.twig" %}
+				</div>
+				<div class="col-md-6 block-border">
+					<h3>{{ 'QualityAssurance_AudienceByConnection'|translate }}</h3>
+					{% include "@QualityAssurance/_con.twig" %}
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}
+
