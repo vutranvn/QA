@@ -37,9 +37,9 @@ class API extends \Piwik\Plugin\API
 		 */
 		foreach ($idSites as $idSite) {
 			$eventsActions  = $this->callHttpApiRequest('Events.getAction', $format, $token_auth, $idSite, $date, $period);
-			$uniqueVisitors = $this->callHttpApiRequest('VisitsSummary.getUniqueVisitors', $format, $token_auth, $idSite, $date, $period);
+			$uniqueVisitors = $this->callHttpApiRequest('VisitsSummary.getUniqueVisitors', $format, $token_auth, $idSite, date("Y-m-d"), 'day');
 
-			if ( !$eventsActions ) {
+//			if ( !$eventsActions ) {
 				$eventsActions = json_decode($eventsActions, true);
 				foreach ($eventsActions as $action) {
 					if ( $action['label'] == 'start-delay' ) {
@@ -54,31 +54,31 @@ class API extends \Piwik\Plugin\API
 						$bitrate[] = $action['avg_event_value'];
 					}
 				}
-			}
-			if ( !$uniqueVisitors ) {
+//			}
+//			if ( !$uniqueVisitors ) {
 				$uniqueVisitors = json_decode($uniqueVisitors, true);
 				if ( isset($uniqueVisitors['value']) ) {
 					$audience_size[] = $uniqueVisitors['value'];
 				}
-			}
+//			}
 		}
 
 		$formatter 		= new Formatter();
 		return array(
 			'audience_size'     => array(
-				'value'     => $audience_size?$formatter->getPrettyNumber( array_sum($audience_size)/count($audience_size) ):'Empty',
+				'value'     => $audience_size?$formatter->getPrettyNumber( array_sum($audience_size)/count($audience_size) ):0,
 				'metrics'   => 'audience_size',
 			),
 			'startup_time'     => array(
-				'value'     => $startup_time?$formatter->getPrettyNumber( array_sum($startup_time)/count($startup_time) ):'Empty',
+				'value'     => $startup_time?$formatter->getPrettyNumber( array_sum($startup_time)/count($startup_time) ):0,
 				'metrics'   => 'startup_time',
 			),
 			'bitrate'     => array(
-				'value'     => $bitrate?$formatter->getPrettyNumber( array_sum($bitrate)/count($bitrate) ):'Empty',
+				'value'     => $bitrate?$formatter->getPrettyNumber( array_sum($bitrate)/count($bitrate) ):0,
 				'metrics'   => 'bitrate',
 			),
 			'buffer_time'     => array(
-				'value'     => $buffer_time?$formatter->getPrettyNumber( array_sum($buffer_time)/count($buffer_time) ):'Empty',
+				'value'     => $buffer_time?$formatter->getPrettyNumber( array_sum($buffer_time)/count($buffer_time) ):0,
 				'metrics'   => 'buffer_time',
 			),
 			'refreshAfterXSecs' => 60,
@@ -91,6 +91,9 @@ class API extends \Piwik\Plugin\API
 		if ( empty($columns) ) {
 			$columns = array(
 				'audience',
+                'startup_time',
+//                'bit_rate',
+                'rebuffer_time'
 			);
 		}
 
@@ -103,36 +106,52 @@ class API extends \Piwik\Plugin\API
 		$result = array();
 		foreach ($idSites as $idSite) {
 			if ( in_array('audience', $columns)) {
-				$rByIdSite = $this->callHttpApiRequest('VisitsSummary.getUniqueVisitors', $format, $token_auth, $idSite, $tDate, $tPeriod);
+				$rByIdSite = $this->callHttpApiRequest('VisitsSummary.getUniqueVisitors', $format, $token_auth, $idSite, $date, 'day');
 				$rByIdSite = json_decode($rByIdSite, true);
-
 				foreach ($rByIdSite as $date => $val) {
 					if (isset($result[$date])) {
-						$result[$date] += (int)$val;
+						$result[$date]['audience'] += (int)$val;
 					} else {
-						$result[$date] = $val;
+						$result[$date]['audience'] = $val;
 					}
 				}
-			} else {
-				$result = $this->callHttpApiRequest('Events.getAction', $format, $token_auth, $idSite, $date, 'day');
 			}
+			$date = Common::getRequestVar('date', false);
 
-//            if ( !$eventsActions ) {
-//                $eventsActions = json_decode($eventsActions, true);
-//                foreach ($eventsActions as $action) {
-//                    if ( $action['label'] == 'start-delay' ) {
-//                        $startup_time[] = $action['avg_event_value'];
-//                    }
-//
-//                    if ( $action['label'] == 'rebuffer-time' ) {
-//                        $buffer_time[] = $action['avg_event_value'];
-//                    }
-//
-//                    if ( $action['label'] == 'bitrate' ) {
-//                        $bitrate[] = $action['avg_event_value'];
-//                    }
-//                }
-//            }
+			if (count(explode(",", $date)) == 1) {
+                $end    = date("Y-m-d");
+                $from   = date('Y-m-d',(strtotime ( '-15 days', strtotime($end)) ));
+                $date   = "$end,$from";
+            }
+
+            $rActions = $this->callHttpApiRequest('Events.getAction', $format, $token_auth, $idSite, $date, 'day');
+            $rActions = json_decode($rActions, true);
+
+            if ( $rActions ) {
+                foreach ($rActions as $d => $action) {
+                    if ( $action ) {
+                        foreach ($action as $r) {
+
+                            if ($r['label'] == 'start-delay') {
+                                if (isset($result[$d]['startup_time'])) {
+                                    $result[$d]['startup_time'] += (int)$action['avg_event_value'];
+                                } else {
+                                    $result[$d]['startup_time']  = $action['avg_event_value'];
+                                }
+                            }
+
+                            if ($r['label'] == 'rebuffer-time') {
+                                if (isset($result[$d]['rebuffer_time'])) {
+                                    $result[$d]['rebuffer_time'] += (int)$action['avg_event_value'];
+                                } else {
+                                    $result[$d]['rebuffer_time'] = $action['avg_event_value'];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
 		}
 
 		return DataTable::makeFromIndexedArray($result);

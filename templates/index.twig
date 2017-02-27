@@ -39,17 +39,17 @@
                     </div>
                 </div>
 
-                <div class="col-md-3 block-btn btn btn-warning">
-                    <span>Bitrate</span>
-                    <div class="widgetContent ng-scope">
-                        <div class='overview-widget-bitrate-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
-                            <div class='overview-widget-bitrate-counter' title="{{ bitrate }}{{ ' per second'|translate(lastMinutes) | raw }}">
-                                <div>{{ bitrate }}</div>
-                            </div>
-                        </div>
-                        <script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneBR();});</script>
-                    </div>
-                </div>
+                {#<div class="col-md-3 block-btn btn btn-warning">#}
+                    {#<span>Bitrate</span>#}
+                    {#<div class="widgetContent ng-scope">#}
+                        {#<div class='overview-widget-bitrate-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">#}
+                            {#<div class='overview-widget-bitrate-counter' title="{{ bitrate }}{{ ' per second'|translate(lastMinutes) | raw }}">#}
+                                {#<div>{{ bitrate }}</div>#}
+                            {#</div>#}
+                        {#</div>#}
+                        {#<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneBR();});</script>#}
+                    {#</div>#}
+                {#</div>#}
 
                 <div class="col-md-3 block-btn btn btn-warning">
                     <span>Buffer Time</span>
@@ -71,11 +71,11 @@
         <div class="col-md-12 row-block row-three">
             <div class="row">
                 <div class="col-md-6 block-border">
-                    <h3 piwik-enriched-headline>{{ 'QualityAssurance_AudienceByFormat'|translate }}</h3>
+                    <h3>{{ 'QualityAssurance_AudienceByFormat'|translate }}</h3>
                     {% include "@QualityAssurance/_for.twig" %}
                 </div>
                 <div class="col-md-6 block-border">
-                    <h3 piwik-enriched-headline>{{ 'QualityAssurance_AudienceByGeoraphy'|translate }}</h3>
+                    <h3>{{ 'QualityAssurance_AudienceByGeoraphy'|translate }}</h3>
                     {{ audienceOfGeo|raw }}
                     {#{% include "@QualityAssurance/_map.twig" %}#}
                 </div>
@@ -85,11 +85,11 @@
         <div class="col-md-12 row-block row-four">
             <div class="row">
                 <div class="col-md-6 block-border">
-                    <h3 piwik-enriched-headline>{{ 'QualityAssurance_AudienceByCategory'|translate }}</h3>
+                    <h3>{{ 'QualityAssurance_AudienceByCategory'|translate }}</h3>
                     {% include "@QualityAssurance/_cat.twig" %}
                 </div>
                 <div class="col-md-6 block-border">
-                    <h3 piwik-enriched-headline>{{ 'QualityAssurance_AudienceByConnection'|translate }}</h3>
+                    <h3>{{ 'QualityAssurance_AudienceByConnection'|translate }}</h3>
                     {% include "@QualityAssurance/_con.twig" %}
                 </div>
             </div>

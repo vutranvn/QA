@@ -28,10 +28,10 @@ class Controller extends \Piwik\Plugin\Controller
 
     public function index()
     {
-        return $this->getStreamAnalyzer($isWidgetized = false);
+        return $this->getStreamAnalyzer();
     }
 
-    public function getStreamAnalyzer($isWidgetized = false)
+    public function getStreamAnalyzer()
     {
         Piwik::checkUserHasSomeViewAccess();
 
@@ -40,7 +40,6 @@ class Controller extends \Piwik\Plugin\Controller
 
         $view = new View("@QualityAssurance/index");
 
-        $view->isWidgetized         = $isWidgetized;
         $view->displayRevenueColumn = Common::isGoalPluginEnabled();
         $view->limit                = Config::getInstance()->General['all_websites_website_per_page'];
         $view->show_sparklines      = Config::getInstance()->General['show_multisites_sparklines'];
@@ -70,11 +69,17 @@ class Controller extends \Piwik\Plugin\Controller
 		$view->translations 	= array(
 			'audience_size' => Piwik::translate('QualityAssurance_Audience')
 		);
+
+		$view->urlSparklineAudience = $this->getUrlSparkline('', array('columns' => array('audience')));
+
         $view->lastMinutes  = $lastMinutes;
 		$view->refreshAfterXSecs = 5;
 
         $overview = array(
-            'audience'
+            'audience',
+            'startup_time',
+//            'bit_rate',
+            'rebuffer_time'
         );
         $view->graphOverview = $this->getGraphOverview(array(), $overview);
 
@@ -110,9 +115,9 @@ class Controller extends \Piwik\Plugin\Controller
 
         $selectableColumns = array(
             'audience',
-//            'startup_time',
+            'startup_time',
 //            'bit_rate',
-//            'rebuffer_time'
+            'rebuffer_time'
         );
 
         $view = $this->getLastUnitGraphAcrossPlugins($this->pluginName, __FUNCTION__, $columns, $selectableColumns, '', 'QualityAssurance.getGraphEvolution');
@@ -124,9 +129,9 @@ class Controller extends \Piwik\Plugin\Controller
         $view->requestConfig->disable_generic_filters=true;
         $view->config->addTranslations(array(
             'audience'      => Piwik::translate('QualityAssurance_Audience'),
-//            'startup_time'  => Piwik::translate('QualityAssurance_StartupTime'),
+            'startup_time'  => Piwik::translate('QualityAssurance_StartupTime'),
 //            'bit_rate'      => Piwik::translate('QualityAssurance_Bitrate'),
-//            'rebuffer_time' => Piwik::translate('QualityAssurance_RebufferTime'),
+            'rebuffer_time' => Piwik::translate('QualityAssurance_RebufferTime'),
         ));
 
         // Can not check empty so have to hardcode. F**k me!
