@@ -69,7 +69,7 @@ echo "</pre>";
 		$formatter 		= new Formatter();
 		return array(
 			'audience_size'     => array(
-				'value'     => $audience_size?$formatter->getPrettyNumber( array_sum($audience_size)/count($audience_size) ):0,
+				'value'     => $audience_size?$formatter->getPrettyNumber( array_sum($audience_size) ):0,
 				'metrics'   => 'audience_size',
 			),
 			'startup_time'     => array(
