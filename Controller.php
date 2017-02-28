@@ -35,8 +35,8 @@ class Controller extends \Piwik\Plugin\Controller
 	{
 		Piwik::checkUserHasSomeViewAccess();
 
-//        $date   = Common::getRequestVar('date', 'today');
-//        $period = Common::getRequestVar('period', 'day');
+		// $date   = Common::getRequestVar('date', 'today');
+		// $period = Common::getRequestVar('period', 'day');
 
 		$view = new View("@QualityAssurance/index");
 
@@ -46,16 +46,9 @@ class Controller extends \Piwik\Plugin\Controller
 
 		$view->autoRefreshTodayReport = 0;
 		// if the current date is today, or yesterday,
-		// in case the website is set to UTC-12), or today in UTC+14, we refresh the page every 5min
-//        if (in_array($date, array('today', date('Y-m-d'),
-//            'yesterday', Date::factory('yesterday')->toString('Y-m-d'),
-//            Date::factory('now', 'UTC+14')->toString('Y-m-d')))
-//        ) {
-//            $view->autoRefreshTodayReport = Config::getInstance()->General['multisites_refresh_after_seconds'];
-//        }
 
 		$params = $this->getGraphParamsModified();
-//        $view->dateSparkline = $period == 'range' ? $date : $params['date'];
+		// $view->dateSparkline = $period == 'range' ? $date : $params['date'];
 
 		// Widget bandwidth
 		$lastMinutes = 2;
@@ -79,9 +72,9 @@ class Controller extends \Piwik\Plugin\Controller
 
 		$overview = array(
 			'audience',
-//            'startup_time',
-//            'bit_rate',
-//            'rebuffer_time'
+			// 'startup_time',
+			// 'bit_rate',
+			// 'rebuffer_time'
 		);
 		$view->graphOverview = $this->getGraphOverview(array(), $overview);
 
@@ -99,11 +92,6 @@ class Controller extends \Piwik\Plugin\Controller
 		$view->siteName = $this->translator->translate('QualityAssurance_AllWebsitesDashboard');
 
 		return $view->render();
-	}
-
-	public function getByFormat()
-	{
-
 	}
 
 	public function getGraphOverview(array $columns = array(), array $defaultColumns = array())
@@ -133,7 +121,7 @@ class Controller extends \Piwik\Plugin\Controller
 		$view->config->addTranslations(array(
 			'audience'      => Piwik::translate('QualityAssurance_Audience'),
 			'startup_time'  => Piwik::translate('QualityAssurance_StartupTime'),
-//            'bit_rate'      => Piwik::translate('QualityAssurance_Bitrate'),
+			// 'bit_rate'      => Piwik::translate('QualityAssurance_Bitrate'),
 			'rebuffer_time' => Piwik::translate('QualityAssurance_RebufferTime'),
 		));
 

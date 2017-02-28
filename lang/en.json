@@ -11,6 +11,7 @@
     "AudienceByFormat": "Audience size by format",
     "AudienceByConnection": "Audience size by connection speed",
     "AudienceByCategory": "Audience size by category",
-    "AudienceByGeoraphy": "Audience size by georaphy"
+    "AudienceByGeoraphy": "Audience size by georaphy",
+    "ConnectionSpeed": "Connection Speed"
   }
 }

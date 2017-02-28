@@ -99,9 +99,9 @@ class API extends \Piwik\Plugin\API
 		$tPeriod    = $period;
 
 		$result = array();
-		foreach ($idSites as $idSite) {
+		foreach ($idSites as $id) {
 			if ( strpos($columns,'audience') !== false ) {
-				$rByIdSite = $this->callHttpApiRequest('VisitsSummary.getUniqueVisitors', $format, $token_auth, $idSite, $date, 'day');
+				$rByIdSite = $this->callHttpApiRequest('VisitsSummary.getUniqueVisitors', $format, $token_auth, $id, $date, 'day');
 				$rByIdSite = json_decode($rByIdSite, true);
 
 				foreach ($rByIdSite as $date => $val) {
@@ -120,7 +120,7 @@ class API extends \Piwik\Plugin\API
 				$date   = "$end,$from";
 			}
 
-			$rActions = $this->callHttpApiRequest('Events.getAction', $format, $token_auth, $idSite, $date, 'day');
+			$rActions = $this->callHttpApiRequest('Events.getAction', $format, $token_auth, $id, $date, 'day');
 			$rActions = json_decode($rActions, true);
 			if ( $rActions ) {
 				foreach ($rActions as $d => $action) {
@@ -157,12 +157,12 @@ class API extends \Piwik\Plugin\API
 		$format = 'JSON';
 		$token_auth = Piwik::getCurrentUserTokenAuth();
 		$result = array();
-		foreach ($idSites as $idSite) {
-			$idSubtable = $this->callHttpApiRequest('Events.getCategory', $format, $token_auth, $idSite, $date, $period);
+		foreach ($idSites as $id) {
+			$idSubtable = $this->callHttpApiRequest('Events.getCategory', $format, $token_auth, $id, $date, $period);
 			$idSubtable = json_decode($idSubtable, true);
 			if(isset($idSubtable['lable']) == 'MediaFormat') {
 				$idSubtable = $idSubtable['idsubdatatable'];
-				$rByIdSite = $this->callHttpApiRequest('Events.getActionFromCategoryId', $format, $token_auth, $idSite, $date, $period, $idSubtable);
+				$rByIdSite = $this->callHttpApiRequest('Events.getActionFromCategoryId', $format, $token_auth, $id, $date, $period, $idSubtable);
 				$rByIdSite = json_decode($rByIdSite, true);
 
 				foreach ($rByIdSite as $val) {
@@ -197,12 +197,12 @@ class API extends \Piwik\Plugin\API
 		$format = 'JSON';
 		$token_auth = Piwik::getCurrentUserTokenAuth();
 		$result = array();
-		foreach ($idSites as $idSite) {
-			$idSubtable = $this->callHttpApiRequest('Events.getCategory', $format, $token_auth, $idSite, $date, $period);
+		foreach ($idSites as $id) {
+			$idSubtable = $this->callHttpApiRequest('Events.getCategory', $format, $token_auth, $id, $date, $period);
 			$idSubtable = json_decode($idSubtable, true);
 			if(isset($idSubtable['lable']) == 'MediaContentCategories') {
 				$idSubtable = $idSubtable['idsubdatatable'];
-				$rByIdSite = $this->callHttpApiRequest('Events.getActionFromCategoryId', $format, $token_auth, $idSite, $date, $period, $idSubtable);
+				$rByIdSite = $this->callHttpApiRequest('Events.getActionFromCategoryId', $format, $token_auth, $id, $date, $period, $idSubtable);
 				$rByIdSite = json_decode($rByIdSite, true);
 
 				foreach ($rByIdSite as $val) {
