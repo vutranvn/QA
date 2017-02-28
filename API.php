@@ -37,7 +37,7 @@ class API extends \Piwik\Plugin\API
 		 */
 		foreach ($idSites as $idSite) {
 			$eventsActions  = $this->callHttpApiRequest('Events.getAction', $format, $token_auth, $idSite, $date, $period);
-			$uniqueVisitors = $this->callHttpApiRequest('VisitsSummary.getUniqueVisitors', $format, $token_auth, $idSite, date("Y-m-d"), 'day');
+			$uniqueVisitors = $this->callHttpApiRequest('Live.getCounters', $format, $token_auth, $idSite, '', '', $lastMinutes = 3);
 
 //			if ( !$eventsActions ) {
 				$eventsActions = json_decode($eventsActions, true);
@@ -57,8 +57,8 @@ class API extends \Piwik\Plugin\API
 //			}
 //			if ( !$uniqueVisitors ) {
 				$uniqueVisitors = json_decode($uniqueVisitors, true);
-				if ( isset($uniqueVisitors['value']) ) {
-					$audience_size[] = $uniqueVisitors['value'];
+				if ( isset($uniqueVisitors['visitors']) ) {
+					$audience_size[] = $uniqueVisitors['visitors'];
 				}
 //			}
 		}
@@ -257,7 +257,7 @@ class API extends \Piwik\Plugin\API
 		return DataTable::makeFromIndexedArray($graphData);
 	}
 
-	private function callHttpApiRequest($method, $format, $token_auth, $idSite = false, $date = false, $period = false, $idSubtable = false)
+	private function callHttpApiRequest($method, $format, $token_auth, $idSite = false, $date = false, $period = false, $lastMinutes = false, $idSubtable = false)
 	{
 		$url = 'module=API&method='.$method;
 		if ( $idSite ) {
@@ -269,7 +269,9 @@ class API extends \Piwik\Plugin\API
 		if ( $period ) {
 			$url .= '&period='.$period;
 		}
-		if ( $idSubtable ) {
+		if ( $lastMinutes ) {
+			$url .= '&lastMinutes='.$lastMinutes;
+		}if ( $idSubtable ) {
 			$url .= '&idSubtable='.$idSubtable;
 		}
 		$url .= '&format='.$format.'&token_auth='.$token_auth;
