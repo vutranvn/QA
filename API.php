@@ -37,7 +37,7 @@ class API extends \Piwik\Plugin\API
 		 */
 		foreach ($idSites as $idSite) {
 			$eventsActions  = $this->callHttpApiRequest('Events.getAction', $format, $token_auth, $idSite, $date, $period);
-			$uniqueVisitors = $this->callHttpApiRequest('Live.getCounters', $format, $token_auth, $idSite, '', '', $lastMinutes = 3);
+			$uniqueVisitors = $this->callHttpApiRequest('Live.getCounters', $format, $token_auth, $idSite, '', '', $lastMinutes = 2);
 
 //			if ( !$eventsActions ) {
 				$eventsActions = json_decode($eventsActions, true);
@@ -57,12 +57,13 @@ class API extends \Piwik\Plugin\API
 //			}
 //			if ( !$uniqueVisitors ) {
 				$uniqueVisitors = json_decode($uniqueVisitors, true);
+                $uniqueVisitors = current($uniqueVisitors);
 				if ( isset($uniqueVisitors['visitors']) ) {
 					$audience_size[] = $uniqueVisitors['visitors'];
 				}
 //			}
 		}
-
+        
 		$formatter 		= new Formatter();
 		return array(
 			'audience_size'     => array(
