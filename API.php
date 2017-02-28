@@ -59,7 +59,7 @@ class API extends \Piwik\Plugin\API
 				$uniqueVisitors = json_decode($uniqueVisitors, true);
                 $uniqueVisitors = current($uniqueVisitors);
 				if ( isset($uniqueVisitors['visitors']) ) {
-					$audience_size[] = $uniqueVisitors['visitors'];
+					$audience_size[] = (int) $uniqueVisitors['visitors'];
 				}
 //			}
 		}
