@@ -63,7 +63,9 @@ class API extends \Piwik\Plugin\API
 				}
 //			}
 		}
-        
+echo "<pre>";
+    var_dump($audience_size);
+echo "</pre>";
 		$formatter 		= new Formatter();
 		return array(
 			'audience_size'     => array(
