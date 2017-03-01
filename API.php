@@ -160,13 +160,13 @@ class API extends \Piwik\Plugin\API
 		foreach ($idSites as $id) {
 			$idSubtable = $this->callHttpApiRequest('Events.getCategory', $format, $token_auth, $id, $date, $period);
 			$idSubtable = json_decode($idSubtable, true);
-			if(isset($idSubtable['lable']) == 'MediaFormat') {
+			if(isset($idSubtable['label']) == 'MediaFormat') {
 				$idSubtable = $idSubtable['idsubdatatable'];
 				$rByIdSite = $this->callHttpApiRequest('Events.getActionFromCategoryId', $format, $token_auth, $id, $date, $period, $idSubtable);
 				$rByIdSite = json_decode($rByIdSite, true);
 
 				foreach ($rByIdSite as $val) {
-					$result[$val['lable']] = $val['nb_visits'];
+					$result[$val['label']] = $val['nb_visits'];
 				}
 			}
 
@@ -200,13 +200,13 @@ class API extends \Piwik\Plugin\API
 		foreach ($idSites as $id) {
 			$idSubtable = $this->callHttpApiRequest('Events.getCategory', $format, $token_auth, $id, $date, $period);
 			$idSubtable = json_decode($idSubtable, true);
-			if(isset($idSubtable['lable']) == 'MediaContentCategories') {
+			if(isset($idSubtable['label']) == 'MediaContentCategories') {
 				$idSubtable = $idSubtable['idsubdatatable'];
 				$rByIdSite = $this->callHttpApiRequest('Events.getActionFromCategoryId', $format, $token_auth, $id, $date, $period, $idSubtable);
 				$rByIdSite = json_decode($rByIdSite, true);
 
 				foreach ($rByIdSite as $val) {
-					$result[$val['lable']] = $val['nb_visits'];
+					$result[$val['label']] = $val['nb_visits'];
 				}
 			}
 

@@ -11,6 +11,6 @@ class Menu extends \Piwik\Plugin\Menu
     {
         if (!Piwik::hasUserSuperUserAccess()) return;
         $tooltip = Piwik::translate('QualityAssurance_QualityAssurance');
-        $menu->addItem(Piwik::translate('QualityAssurance_QualityAssurance'), null, $this->urlForDefaultAction('index'), 2, $tooltip);
+        $menu->addItem(Piwik::translate('QualityAssurance_QualityAssurance'), '', $this->urlForAction('index'), 2, $tooltip);
     }
 }

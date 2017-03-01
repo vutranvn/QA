@@ -141,7 +141,8 @@
 			<div class="row">
 				<div class="col-md-6 block-border">
 					<h3>{{ 'QualityAssurance_AudienceByCategory'|translate }}</h3>
-					{% include "@QualityAssurance/_cat.twig" %}
+					{#{% include "@QualityAssurance/_cat.twig" %}#}
+                    {{ byCat | raw }}
 				</div>
 				<div class="col-md-6 block-border">
 					<h3>{{ 'QualityAssurance_AudienceByConnection'|translate }}</h3>
