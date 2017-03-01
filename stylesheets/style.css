@@ -12,13 +12,18 @@
     width: 24%;
 }
 
-#stream_analyzer .wait, #stream_analyzer .wait:hover {
+#stream_analyzer .wait {
     color: #D4291F;
     background-color: #FFFFFF;
     border: 1px solid #D4291F;
 }
 
-/*#stream_analyzer .block-btn:first-child {*/
+#stream_analyzer .btn:hover {
+    color: #FFFFFF;
+    background-color: #D4291F;
+}
+
+    /*#stream_analyzer .block-btn:first-child {*/
     /*margin-left: 15px;*/
 /*}*/
 
