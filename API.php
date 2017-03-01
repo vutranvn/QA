@@ -7,7 +7,6 @@ use Piwik\DataTable;
 use Piwik\Piwik;
 use Piwik\Metrics\Formatter;
 use Piwik\API\Request;
-use Piwik\FrontController;
 
 class API extends \Piwik\Plugin\API
 {
@@ -63,7 +62,7 @@ class API extends \Piwik\Plugin\API
 				}
 //			}
 		}
-		$formatter 		= new Formatter();
+		$formatter 	= new Formatter();
 		return array(
 			'audience_size'     => array(
 				'value'     => $audience_size?$formatter->getPrettyNumber( array_sum($audience_size) ):0,
@@ -192,7 +191,6 @@ class API extends \Piwik\Plugin\API
 
 	public function getCat($idSite, $period, $date, $segment = false)
 	{
-
 		$idSites = $this->idSites;
 		$format = 'JSON';
 		$token_auth = Piwik::getCurrentUserTokenAuth();
@@ -278,10 +276,6 @@ class API extends \Piwik\Plugin\API
 		$request = new Request($url);
 
 		return $request->process();
-	}
-
-	private function checkUserIsAnonymous(){
-		//
 	}
 
 	private function getArrIdSitesAccessView()

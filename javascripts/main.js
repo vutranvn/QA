@@ -1,4 +1,3 @@
-/* Refresh widget bandwidth in overview */
 $(function () {
     var refreshWidget = function (element, refreshAfterXSecs) {
         // if the widget has been removed from the DOM, abort

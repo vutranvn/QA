@@ -2,11 +2,9 @@
 namespace Piwik\Plugins\QualityAssurance;
 
 use Piwik\Common;
-use Piwik\Config;
 use Piwik\Piwik;
 use Piwik\Translation\Translator;
 use Piwik\View;
-use Piwik\API\Request;
 use Piwik\FrontController;
 
 class Controller extends \Piwik\Plugin\Controller
@@ -60,10 +58,7 @@ class Controller extends \Piwik\Plugin\Controller
 		$view ->audienceOfGeo = FrontController::getInstance()->dispatch('UserCountryMap', 'visitorMap');
 		// End Map ---------- //
 
-
 		$this->setGeneralVariablesView($view);
-
-		$view->siteName = $this->translator->translate('QualityAssurance_AllWebsitesDashboard');
 
 		return $view->render();
 	}

@@ -5,6 +5,6 @@ abstract class Base extends \Piwik\Plugin\Report
 {
     protected function init()
     {
-
+        $this->category = 'QoS';
     }
 }

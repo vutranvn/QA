@@ -13,7 +13,7 @@
 	<div id="main">
 		<div class="col-md-12 row-block row-one">
 			<div class="row btn-group text-center">
-				<div class="col-md-3 block-btn btn btn-danger click-me" data-src="{{ urlSparklineAudience }}">
+				<div class="col-md-3 block-btn btn click-me" data-src="{{ urlSparklineAudience }}">
 					<span>Audience Size</span>
 					<div class="widgetContent ng-scope">
 						<div class='overview-widget-ausize-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
@@ -25,7 +25,7 @@
 					</div>
 				</div>
 
-				<div class="col-md-3 block-btn btn btn-warning click-me" data-src="{{ urlSparklineStartup }}">
+				<div class="col-md-3 block-btn btn click-me wait" data-src="{{ urlSparklineStartup }}">
 					<span>Start Up Time</span>
 					<div class="widgetContent ng-scope">
 						<div class='overview-widget-startup_time-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
@@ -49,7 +49,7 @@
 					{#</div>#}
 				{#</div>#}
 
-				<div class="col-md-3 block-btn btn btn-warning click-me" data-src="{{ urlSparklineRebuffer }}">
+				<div class="col-md-3 block-btn btn click-me wait" data-src="{{ urlSparklineRebuffer }}">
 					<span>Buffer Time</span>
 					<div class="widgetContent ng-scope">
 						<div class='overview-widget-buffer_time-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
@@ -99,9 +99,18 @@
 							// on click, reload the graph with the new url
 							$(this).off('click.click-me');
 							$(this).on('click.click-me', function () {
+							    $(".click-me").each( function () {
+									if (!$(this).hasClass('wait')) {
+									    $(this).addClass('wait');
+									}
+                                });
+
+                                if ($(this).hasClass('wait')) {
+                                    $(this).removeClass('wait');
+                                }
 								var reportId = graph.attr('data-graph-id'),
 									dataTable = $(require('piwik/UI').DataTable.getDataTableByReport(reportId));
-								console.log(reportId,dataTable);
+
 								// when the metrics picker is used, the id of the data table might be updated (which is correct behavior).
 								// for example, in goal reports it might change from GoalsgetEvolutionGraph to GoalsgetEvolutionGraph1.
 								// if this happens, we can't find the graph using $('#'+idDataTable+"Chart");
@@ -141,8 +150,7 @@
 			<div class="row">
 				<div class="col-md-6 block-border">
 					<h3>{{ 'QualityAssurance_AudienceByCategory'|translate }}</h3>
-					{#{% include "@QualityAssurance/_cat.twig" %}#}
-                    {{ byCat | raw }}
+					{% include "@QualityAssurance/_cat.twig" %}
 				</div>
 				<div class="col-md-6 block-border">
 					<h3>{{ 'QualityAssurance_AudienceByConnection'|translate }}</h3>

@@ -12,13 +12,19 @@
     width: 24%;
 }
 
-#stream_analyzer .block-btn:first-child {
-    margin-left: 15px;
+#stream_analyzer .wait, #stream_analyzer .wait:hover {
+    color: #D4291F;
+    background-color: #FFFFFF;
+    border: 1px solid #D4291F;
 }
 
-#stream_analyzer .block-btn:last-child {
+/*#stream_analyzer .block-btn:first-child {*/
+    /*margin-left: 15px;*/
+/*}*/
+
+/*#stream_analyzer .block-btn:last-child {*/
     /*margin-right: 0px;*/
-}
+/*}*/
 
 #stream_analyzer .row-three .col-md-6, #stream_analyzer .row-four .col-md-6 {
     width: 49% !important;
