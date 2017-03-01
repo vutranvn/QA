@@ -9,6 +9,8 @@ class Menu extends \Piwik\Plugin\Menu
 {
     public function configureTopMenu(MenuTop $menu)
     {
-
+        if (!Piwik::hasUserSuperUserAccess()) return;
+        $tooltip = Piwik::translate('QualityAssurance_QualityAssurance');
+        $menu->addItem(Piwik::translate('QualityAssurance_QualityAssurance'), null, $this->urlForDefaultAction('index'), 2, $tooltip);
     }
 }
