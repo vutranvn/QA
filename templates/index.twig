@@ -1,0 +1,170 @@
+{% extends 'dashboard.twig' %}
+
+{% block topcontrols %}
+<div class="row">
+	<div class="col s12 m12 l10 offset-l1">
+	{#{% include "@QualityAssurance/_title.twig" %}#}
+    {% include "@CoreHome/_periodSelect.twig" %}
+    {% include "@CoreHome/_headerMessage.twig" %}
+	</div>
+</div>
+
+	{#{% include "@QualityAssurance/_selectTimeReresh.twig" %}#}
+{% endblock %}
+
+{% block content %}
+<div class="row" id="stream_analyzer">
+	<div class="col s12 m12 l10 offset-l1">
+		<div class="row">
+			<div class="col s12 m12 l10 offset-l1 row-block row-one">
+				<div class="row btn-group text-center">
+					<div class="col m3 block-btn click-me" data-src="{{ urlSparklineAudience }}">
+						<span>Audience Size</span>
+						<div class="widgetContent ng-scope">
+							<div class='overview-widget-ausize-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
+								<div class='overview-widget-ausize-counter' title="{{ audience_size }}{{ ' per second'|translate(lastMinutes) | raw }}">
+									<div>{{ audience_size }}</div>
+								</div>
+							</div>
+							<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOne();});</script>
+						</div>
+					</div>
+
+					<div class="col m3 block-btn click-me wait" data-src="{{ urlSparklineStartup }}">
+						<span>Start Up Time</span>
+						<div class="widgetContent ng-scope">
+							<div class='overview-widget-startup_time-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
+								<div class='overview-widget-startup_time-counter' title="{{ startup_time }}{{ ' per second'|translate(lastMinutes) | raw }}">
+									<div>{{ startup_time }}</div>
+								</div>
+							</div>
+							<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneSU();});</script>
+						</div>
+					</div>
+
+					{#<div class="col m3 block-btn btn-warning">#}
+						{#<span>Bitrate</span>#}
+						{#<div class="widgetContent ng-scope">#}
+							{#<div class='overview-widget-bitrate-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">#}
+								{#<div class='overview-widget-bitrate-counter' title="{{ bitrate }}{{ ' per second'|translate(lastMinutes) | raw }}">#}
+									{#<div>{{ bitrate }}</div>#}
+								{#</div>#}
+							{#</div>#}
+							{#<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneBR();});</script>#}
+						{#</div>#}
+					{#</div>#}
+
+					<div class="col m3 block-btn click-me wait" data-src="{{ urlSparklineRebuffer }}">
+						<span>Buffer Time</span>
+						<div class="widgetContent ng-scope">
+							<div class='overview-widget-buffer_time-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
+								<div class='overview-widget-buffer_time-counter' title="{{ buffer_time }}{{ ' per second'|translate(lastMinutes) | raw }}">
+									<div>{{ buffer_time }}</div>
+								</div>
+							</div>
+							<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneBT();});</script>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col m12 row-block block-border row-two">
+				<h2 style="visibility: hidden" data-graph-id="QualityAssurance.graphOverview"></h2>
+				{{ graphOverview|raw }}
+			</div>
+
+			<script type="text/javascript">
+			$(function() { initializeGraphOverview(); });
+			window.initializeGraphOverview = function () {
+				var sparklineUrlParamsToIgnore = ['module', 'action', 'idSite', 'period', 'date', 'viewDataTable'];
+
+				$("[data-graph-id]").each(function () {
+					var graph = $(this);
+
+					// try to find sparklines and add them clickable behaviour
+					graph.parent().parent().find('div.click-me').each(function () {
+
+						// find the sparkline and get it's src attribute
+						var sparklineUrl = $(this).attr('data-src');
+
+						if (sparklineUrl != "") {
+							var params = broadcast.getValuesFromUrl(sparklineUrl);
+							for (var i = 0; i != sparklineUrlParamsToIgnore.length; ++i) {
+								delete params[sparklineUrlParamsToIgnore[i]];
+							}
+							for (var key in params) {
+								if (typeof params[key] == 'undefined') {
+									// this happens for example with an empty segment parameter
+									delete params[key];
+								} else {
+									params[key] = decodeURIComponent(params[key]);
+								}
+							}
+
+							// on click, reload the graph with the new url
+							$(this).off('click.click-me');
+							$(this).on('click.click-me', function () {
+								$(".click-me").each( function () {
+									if (!$(this).hasClass('wait')) {
+										$(this).addClass('wait');
+									}
+								});
+
+								if ($(this).hasClass('wait')) {
+									$(this).removeClass('wait');
+								}
+								var reportId = graph.attr('data-graph-id'),
+									dataTable = $(require('piwik/UI').DataTable.getDataTableByReport(reportId));
+
+								// when the metrics picker is used, the id of the data table might be updated (which is correct behavior).
+								// for example, in goal reports it might change from GoalsgetEvolutionGraph to GoalsgetEvolutionGraph1.
+								// if this happens, we can't find the graph using $('#'+idDataTable+"Chart");
+								// instead, we just use the first evolution graph we can find.
+								if (dataTable.length == 0) {
+									if ($(this).closest('.widget').length) {
+										dataTable = $(this).closest('.widget').find('div.dataTableVizEvolution');
+									} else {
+										dataTable = $('div.dataTableVizEvolution');
+									}
+								}
+
+								// reload the datatable w/ a new column & scroll to the graph
+								dataTable.trigger('reload', params);
+							});
+						}
+					});
+				});
+			};
+		</script>
+
+			<div class="col m12 row-block row-three">
+			<div class="row">
+				<div class="col m6 block-border">
+					<h3 class="title">{{ 'QualityAssurance_AudienceByFormat'|translate }}</h3>
+					{% include "@QualityAssurance/_for.twig" %}
+				</div>
+				<div class="col m6 block-border">
+					<h3 class="title">{{ 'QualityAssurance_AudienceByGeoraphy'|translate }}</h3>
+					{{ audienceOfGeo|raw }}
+					{#{% include "@QualityAssurance/_map.twig" %}#}
+				</div>
+			</div>
+		</div>
+
+			<div class="col m12 row-block row-four">
+				<div class="row">
+				<div class="col m6 block-border">
+					<h3 class="title">{{ 'QualityAssurance_AudienceByCategory'|translate }}</h3>
+					{% include "@QualityAssurance/_cat.twig" %}
+				</div>
+				{#<div class="col m6 block-border">#}
+					{#<h3 class="title">{{ 'QualityAssurance_AudienceByConnection'|translate }}</h3>#}
+					{#{% include "@QualityAssurance/_con.twig" %}#}
+				{#</div>#}
+			</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,87 @@
+#stream_analyzer {
+    background-color: transparent;
+}
+
+#stream_analyzer h3.title {
+    font-size: 18px;
+    line-height: 18px;
+    color: #0d0d0d;
+    margin: 19px 0 16px 10px;
+}
+
+#stream_analyzer .block-border {
+    border: 1px solid #cccccc!important;
+}
+
+#stream_analyzer .block-btn {
+    margin: 2px;
+    padding: 5px;
+    width: 24%;
+    min-height: 26px;
+    line-height: 26px;
+    text-align: center;
+}
+
+#stream_analyzer .block-btn {
+    color: #FFFFFF;
+    background-color: #D4291F;
+    border-radius: 5px;
+}
+
+#stream_analyzer .wait {
+    color: #D4291F;
+    background-color: #FFFFFF;
+    border: 1px solid #D4291F;
+}
+
+#stream_analyzer .btn:hover {
+    color: #FFFFFF;
+    background-color: #D4291F;
+}
+
+#stream_analyzer .row-three .m6, #stream_analyzer .row-four .m6 {
+    width: 49% !important;
+}
+
+#stream_analyzer .row .col {
+    padding: 0 !important;
+}
+
+#stream_analyzer .row-three .m6:first-child {
+    margin-right: 22px;
+}
+
+#stream_analyzer .row-four .m6:first-child {
+    margin-right: 22px;
+}
+
+.top_controls .qa_title, .top_controls .qa_timeRefresh {
+    z-index: 123;
+}
+.top_controls .qa_title {
+    line-height: 50px;
+    /*display: inline-block;*/
+    /*position: absolute;*/
+    /*margin-right: 18px;*/
+    /*vertical-align: top;*/
+    /*font-size: 11px;*/
+}
+
+.top_controls .periodSelector {
+    float: right !important;
+}
+
+.top_controls .qa_timeRefresh {
+    padding: 6px 0px;
+    float: right;
+    max-height: 40px;
+    font-size: 12px;
+}
+
+.top_controls .qa_timeRefresh option {
+    font-size: 11px;
+}
+
+#stream_analyzer .row-block {
+    margin: 10px 0px;
+}
