@@ -1,8 +1,8 @@
 {
 	"name": "QA",
 	"description": "QualityAssurance",
-	"version": "1.0.0",
-	"keywords": [],
+	"version": "2.0.0",
+	"keywords": ["analyzer", "stream", "video", "audio"],
 	"homepage": "http://sbddigital.com",
 	"license": "GPL v3+",
 	"authors": [
@@ -11,5 +11,8 @@
 			"email"     : "vutp@saobacdau.vn",
 			"homepage"  : "http://sbddigital.com"
 		}
-	]
+	],
+	"require": {
+		"piwik": ">=2.16.0,<3.0.0-b1"
+	}
 }
