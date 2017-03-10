@@ -34,7 +34,7 @@
     border: 1px solid #D4291F;
 }
 
-#stream_analyzer .btn:hover {
+#stream_analyzer .block-btn:hover {
     color: #FFFFFF;
     background-color: #D4291F;
 }
