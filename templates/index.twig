@@ -1,15 +1,4 @@
-{% extends 'dashboard.twig' %}
-
-{% block topcontrols %}
-	{% include "@QualityAssurance/_title.twig" %}
-	{% include "@CoreHome/_periodSelect.twig" %}
-	{#{% include "@QualityAssurance/_selectTimeReresh.twig" %}#}
-	{% include "@CoreHome/_headerMessage.twig" %}
-{% endblock %}
-
-{% block content %}
-<div class="container" id="stream_analyzer">
-
+<div id="stream_analyzer">
 	<div id="main">
 		<div class="col-md-12 row-block row-one">
 			<div class="row btn-group text-center">
@@ -60,6 +49,18 @@
 						<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneBT();});</script>
 					</div>
 				</div>
+
+				<div class="col-md-3 block-btn btn click-me wait" data-src="{{ urlSparklineRebuffer }}">
+					<span>Play Requested</span>
+					<div class="widgetContent ng-scope">
+						<div class='overview-widget-buffer_time-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
+							<div class='overview-widget-buffer_time-counter' title="{{ play_requested }}{{ ' per second'|translate(lastMinutes) | raw }}">
+								<div>{{ play_requested }}</div>
+							</div>
+						</div>
+						<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneBT();});</script>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -69,7 +70,6 @@
 		</div>
 
 		<script type="text/javascript">
-			$(function() { initializeGraphOverview(); });
 			window.initializeGraphOverview = function () {
 				var sparklineUrlParamsToIgnore = ['module', 'action', 'idSite', 'period', 'date', 'viewDataTable'];
 
@@ -99,15 +99,15 @@
 							// on click, reload the graph with the new url
 							$(this).off('click.click-me');
 							$(this).on('click.click-me', function () {
-							    $(".click-me").each( function () {
+								$(".click-me").each( function () {
 									if (!$(this).hasClass('wait')) {
-									    $(this).addClass('wait');
+										$(this).addClass('wait');
 									}
-                                });
+								});
 
-                                if ($(this).hasClass('wait')) {
-                                    $(this).removeClass('wait');
-                                }
+								if ($(this).hasClass('wait')) {
+									$(this).removeClass('wait');
+								}
 								var reportId = graph.attr('data-graph-id'),
 									dataTable = $(require('piwik/UI').DataTable.getDataTableByReport(reportId));
 
@@ -130,6 +130,7 @@
 					});
 				});
 			};
+			$(function() { initializeGraphOverview(); });
 		</script>
 
 		<div class="col-md-12 row-block row-three">
@@ -160,5 +161,4 @@
 		</div>
 	</div>
 </div>
-{% endblock %}
 

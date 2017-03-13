@@ -10,9 +10,9 @@ __How to install plugin?__
 
 Place in plugins directory and active
 
-## Changelog
+## UPDATES IN 2.0.1
 
-2.0.0 
+Please see [2.0.1](CHANGELOG.md)
 
 ## Support
 

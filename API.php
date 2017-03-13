@@ -24,6 +24,7 @@ class API extends \Piwik\Plugin\API
 		$startup_time   = array();
 		$bitrate        = array();
 		$buffer_time    = array();
+		$play_requested = array();
 
 		$idSites = $this->idSites;
 		$date   = Common::getRequestVar('date', date("Y-m-d"));
@@ -52,6 +53,10 @@ class API extends \Piwik\Plugin\API
 					if ( $action['label'] == 'bitrate' ) {
 						$bitrate[] = $action['avg_event_value'];
 					}
+
+					if ( $action['label'] == 'play' ) {
+                        $play_requested[] = $play_requested['avg_event_value'];
+					}
 				}
 //			}
 //			if ( !$uniqueVisitors ) {
@@ -79,6 +84,10 @@ class API extends \Piwik\Plugin\API
 			'buffer_time'     => array(
 				'value'     => $buffer_time?$formatter->getPrettyNumber( array_sum($buffer_time)/count($buffer_time) ):0,
 				'metrics'   => 'buffer_time',
+			),
+            'play_requested'     => array(
+				'value'     => $play_requested?$formatter->getPrettyNumber( array_sum($play_requested)/count($play_requested) ):0,
+				'metrics'   => 'play_requested',
 			),
 			'refreshAfterXSecs' => 60,
 			'lastMinutes'       => $lastMinutes
