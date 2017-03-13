@@ -17,7 +17,7 @@ class Controller extends \Piwik\Plugin\Controller
 		$this->translator = $translator;
 	}
 
-	public function index()
+	public function overview()
 	{
 		return $this->getStreamAnalyzer();
 	}
@@ -33,6 +33,7 @@ class Controller extends \Piwik\Plugin\Controller
 		$view->startup_time   		= $audience_size['startup_time']['value'];
 		$view->bitrate   		    = $audience_size['bitrate']['value'];
 		$view->buffer_time   		= $audience_size['buffer_time']['value'];
+		$view->play_requested   	= $audience_size['play_requested']['value'];
 		$view->refreshAfterXSecs = 10;
 		$view->translations 	= array(
 			'audience_size' => Piwik::translate('QualityAssurance_Audience')

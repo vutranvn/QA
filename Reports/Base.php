@@ -1,10 +1,12 @@
 <?php
 namespace Piwik\Plugins\QualityAssurance\Reports;
 
-abstract class Base extends \Piwik\Plugin\Report
+use Piwik\Plugin\Report;
+
+abstract class Base extends Report
 {
     protected function init()
     {
-        $this->category = 'QoS';
+        $this->categoryId = 'QualityAssurance_QualityAssurance';
     }
 }
