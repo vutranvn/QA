@@ -55,33 +55,6 @@
     margin-right: 20px;
 }
 
-.top_controls .qa_title, .top_controls .qa_timeRefresh {
-    z-index: 123;
-}
-.top_controls .qa_title {
-    line-height: 50px;
-    /*display: inline-block;*/
-    /*position: absolute;*/
-    /*margin-right: 18px;*/
-    /*vertical-align: top;*/
-    /*font-size: 11px;*/
-}
-
-.top_controls .periodSelector {
-    float: right !important;
-}
-
-.top_controls .qa_timeRefresh {
-    padding: 6px 0px;
-    float: right;
-    max-height: 40px;
-    font-size: 12px;
-}
-
-.top_controls .qa_timeRefresh option {
-    font-size: 11px;
-}
-
 #stream_analyzer .row-block {
     margin: 10px 0px;
 }
