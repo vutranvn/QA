@@ -1,6 +1,7 @@
 <?php
 namespace Piwik\Plugins\QualityAssurance;
 
+use Piwik\ViewDataTable\Factory;
 use Piwik\Common;
 use Piwik\Piwik;
 use Piwik\Translation\Translator;
@@ -62,9 +63,9 @@ class Controller extends \Piwik\Plugin\Controller
 
 		$view->graphOverview = $this->getGraphOverview(array(), $overview);
 
-		$view->byFor    = $this->renderReport('getFor');
-		$view->byCon    = $this->renderReport('getCon');
-		$view->byCat    = $this->renderReport('getCat');
+		$view->byFor    = $this->getFor();
+		$view->byCon    = $this->getCon();
+		$view->byCat    = $this->getCat();
 
 		// Map -------------- //
 		$view ->audienceOfGeo = FrontController::getInstance()->dispatch('UserCountryMap', 'visitorMap');
@@ -102,7 +103,7 @@ class Controller extends \Piwik\Plugin\Controller
 			$view->config->y_axis_unit = ' %';
 		} elseif ( in_array('startup_time', $selectableColumns) || in_array('cdn_delay', $selectableColumns) ) {
 			$view->config->y_axis_unit = ' ms';
-		} elseif ( in_array('bit_rate', $selectableColumns) ) {
+		} elseif ( in_array('bitrate', $selectableColumns) ) {
 			$view->config->y_axis_unit = ' kbit/s';
 
 		} elseif ( in_array('streaming_speed', $selectableColumns) ) {
@@ -129,6 +130,106 @@ class Controller extends \Piwik\Plugin\Controller
 
 	public function getFor()
 	{
-		return $this->renderReport("getFor");
+		$view = Factory::build(
+			$defaultType    = 'table',
+			$apiAction      = 'QualityAssurance.getFor',
+			$controllerMethod = 'QualityAssurance.getFor'
+        );
+		$metrics = array(
+			'mp4',
+			'u3m8',
+			'dash',
+			'flv',
+			'Others',
+		);
+
+		$view->config->selectable_columns = $metrics;
+		$view->config->translations['label'] = 'Day';
+		if ( $view->isViewDataTableId('graphVerticalBar') ) {
+			$view->config->columns_to_display = $metrics;
+			$view->requestConfig->filter_limit  = 30;
+			$view->config->max_graph_elements   = 30;
+
+		} elseif ( $view->isViewDataTableId('graphPie') ) {
+			$view->config->columns_to_display = $metrics;
+			$view->config->translations['value'] = 'Audience by format';
+			$view->config->addTranslation('value', 'Audience by format');
+
+		} else {
+			$view->requestConfig->filter_limit  = 10;
+			$view->config->max_graph_elements   = 10;
+		}
+
+		return $view->render();
+	}
+
+	public function getCat()
+	{
+		$view = Factory::build(
+			$defaultType    = 'table',
+			$apiAction      = 'QualityAssurance.getCat',
+			$controllerMethod = 'QualityAssurance.getCat'
+		);
+		$metrics = array(
+			'News',
+			'Sport',
+			'Cartoon',
+			'Others',
+		);
+
+		$view->config->selectable_columns = $metrics;
+		$view->config->translations['label'] = 'Day';
+		if ( $view->isViewDataTableId('graphVerticalBar') ) {
+			$view->config->columns_to_display = $metrics;
+			$view->requestConfig->filter_limit  = 30;
+			$view->config->max_graph_elements   = 30;
+
+		} elseif ( $view->isViewDataTableId('graphPie') ) {
+			$view->config->columns_to_display = $metrics;
+			$view->config->translations['value'] = 'Audience by categories';
+			$view->config->addTranslation('value', 'Audience by categories');
+
+		} else {
+			$view->requestConfig->filter_limit  = 10;
+			$view->config->max_graph_elements   = 10;
+		}
+
+		return $view->render();
+	}
+
+	public function getCon()
+	{
+		$view = Factory::build(
+			$defaultType    = 'table',
+			$apiAction      = 'QualityAssurance.getCon',
+			$controllerMethod = 'QualityAssurance.getCon'
+		);
+
+		$metrics = array(
+			'Cable',
+			'Fiber',
+			'Moblie',
+			'DSL',
+			'Others',
+		);
+
+		$view->config->selectable_columns = $metrics;
+		$view->config->translations['label'] = 'Day';
+		if ( $view->isViewDataTableId('graphVerticalBar') ) {
+			$view->config->columns_to_display = $metrics;
+			$view->requestConfig->filter_limit  = 30;
+			$view->config->max_graph_elements   = 30;
+
+		} elseif ( $view->isViewDataTableId('graphPie') ) {
+			$view->config->columns_to_display = $metrics;
+			$view->config->translations['value'] = 'Audience by connection type';
+			$view->config->addTranslation('value', 'Audience by connection type');
+
+		} else {
+			$view->requestConfig->filter_limit  = 10;
+			$view->config->max_graph_elements   = 10;
+		}
+
+		return $view->render();
 	}
 }
