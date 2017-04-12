@@ -1,60 +1,60 @@
 #stream_analyzer {
-    background-color: transparent;
+	background-color: transparent;
 }
 
 #stream_analyzer h3.title {
-    font-size: 18px;
-    line-height: 18px;
-    color: #0d0d0d;
-    margin: 19px 0 16px 10px;
+	font-size: 18px;
+	line-height: 18px;
+	color: #0d0d0d;
+	margin: 19px 0 16px 10px;
 }
 
 #stream_analyzer .block-border {
-    border: 1px solid #cccccc!important;
+	border: 1px solid #cccccc!important;
 }
 
 #stream_analyzer .block-btn {
-    margin: 2px;
-    padding: 5px;
-    width: 24%;
-    min-height: 26px;
-    line-height: 26px;
-    text-align: center;
+	margin: 2px;
+	padding: 5px;
+	width: 10.7%;
+	min-height: 26px;
+	line-height: 26px;
+	text-align: center;
 }
 
 #stream_analyzer .block-btn {
-    color: #FFFFFF;
-    background-color: #D4291F;
-    border-radius: 5px;
+	color: #FFFFFF;
+	background-color: #D4291F;
+	border-radius: 5px;
 }
 
 #stream_analyzer .wait {
-    color: #D4291F;
-    background-color: #FFFFFF;
-    border: 1px solid #D4291F;
+	color: #D4291F;
+	background-color: #FFFFFF;
+	border: 1px solid #D4291F;
 }
 
 #stream_analyzer .block-btn:hover {
-    color: #FFFFFF;
-    background-color: #D4291F;
+	color: #FFFFFF;
+	background-color: #D4291F;
 }
 
 #stream_analyzer .row-three .m6, #stream_analyzer .row-four .m6 {
-    width: 49% !important;
+	width: 49% !important;
 }
 
 #stream_analyzer .row .col {
-    padding: 0 !important;
+	padding: 0 !important;
 }
 
 #stream_analyzer .row-three .m6:first-child {
-    margin-right: 20px;
+	margin-right: 20px;
 }
 
 #stream_analyzer .row-four .m6:first-child {
-    margin-right: 20px;
+	margin-right: 20px;
 }
 
 #stream_analyzer .row-block {
-    margin: 10px 0px;
+	margin: 10px 0px;
 }

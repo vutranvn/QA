@@ -1,12 +1,12 @@
 <div id="stream_analyzer">
 	<div class="row">
-		<div class="col s12 m12 l10 offset-l1 row-block row-one">
+		<div class="col s12 m12 l12 offset-l1 row-block row-one">
 				<div class="row btn-group text-center">
 					<div class="col m3 block-btn click-me" data-src="{{ urlSparklineAudience }}">
 						<span>{{ 'QualityAssurance_AudienceSize'|translate }}</span>
 						<div class="widgetContent ng-scope">
 							<div class='overview-widget-ausize-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
-								<div class='overview-widget-ausize-counter' title="{{ audience_size }}{{ ' per second'|translate(lastMinutes) | raw }}">
+								<div class='overview-widget-ausize-counter' title="">
 									<div>{{ audience_size }}</div>
 								</div>
 							</div>
@@ -18,19 +18,19 @@
 						<span>{{ 'QualityAssurance_StartUpTime'|translate }}</span>
 						<div class="widgetContent ng-scope">
 							<div class='overview-widget-startup_time-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
-								<div class='overview-widget-startup_time-counter' title="{{ startup_time }}{{ ' per second'|translate(lastMinutes) | raw }}">
-									<div>{{ startup_time }}</div>
+								<div class='overview-widget-startup_time-counter' title="">
+									<div>{{ startup_time }} ms</div>
 								</div>
 							</div>
 							<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneSU();});</script>
 						</div>
 					</div>
 
-					<div class="col m3 block-btn click-me wait">
+					<div class="col m3 block-btn click-me wait" data-src="{{ urlSparklineBitRate }}">
 						<span>{{ 'QualityAssurance_Bitrate'|translate }}</span>
 						<div class="widgetContent ng-scope">
 							<div class='overview-widget-bitrate-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
-								<div class='overview-widget-bitrate-counter' title="{{ bitrate }}{{ ' per second'|translate(lastMinutes) | raw }}">
+								<div class='overview-widget-bitrate-counter' title="">
 									<div>{{ bitrate }} kbit/s</div>
 								</div>
 							</div>
@@ -42,7 +42,7 @@
 						<span>{{ 'QualityAssurance_Buffering'|translate }}</span>
 						<div class="widgetContent ng-scope">
 							<div class='overview-widget-buffer_time-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
-								<div class='overview-widget-buffer_time-counter' title="{{ buffer_time }}{{ ' per second'|translate(lastMinutes) | raw }}">
+								<div class='overview-widget-buffer_time-counter' title="">
 									<div>{{ buffer_time }}%</div>
 								</div>
 							</div>
@@ -50,15 +50,63 @@
 						</div>
 					</div>
 
-					<div class="col m3 block-btn click-me wait" data-src="{{ urlSparklineRebuffer }}">
+					<div class="col m3 block-btn click-me wait" data-src="{{ urlSparklinePlayRequested }}">
 						<span>{{ 'QualityAssurance_PlayRequested'|translate }}</span>
 						<div class="widgetContent ng-scope">
 							<div class='overview-widget-play_requested-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
-								<div class='overview-widget-play_requested-counter' title="{{ play_requested }}{{ ' per second'|translate(lastMinutes) | raw }}">
+								<div class='overview-widget-play_requested-counter' title="">
 									<div>{{ play_requested }}</div>
 								</div>
 							</div>
-							<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneBT();});</script>
+							<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOnePR();});</script>
+						</div>
+					</div>
+
+					<div class="col m3 block-btn click-me wait" data-src="{{ urlSparklineStreamingSpeed }}">
+						<span>{{ 'QualityAssurance_StreamingSpeed'|translate }}</span>
+						<div class="widgetContent ng-scope">
+							<div class='overview-widget-streaming_speed-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
+								<div class='overview-widget-streaming_speed-counter' title="">
+									<div>{{ streaming_speed }} bps</div>
+								</div>
+							</div>
+							<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneSS();});</script>
+						</div>
+					</div>
+
+					<div class="col m3 block-btn click-me wait" data-src="{{ urlSparklineSuccessfulAttempt }}">
+						<span>{{ 'QualityAssurance_SuccessfulAttempt'|translate }}</span>
+						<div class="widgetContent ng-scope">
+							<div class='overview-widget-successful_attempt-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
+								<div class='overview-widget-successful_attempt-counter' title="">
+									<div>{{ successful_attempt }}%</div>
+								</div>
+							</div>
+							<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneSA();});</script>
+						</div>
+					</div>
+
+					<div class="col m3 block-btn click-me wait" data-src="{{ urlSparklineCdnHit }}">
+						<span>{{ 'QualityAssurance_CdnHit'|translate }}</span>
+						<div class="widgetContent ng-scope">
+							<div class='overview-widget-cdn_hit-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
+								<div class='overview-widget-cdn_hit-counter' title="">
+									<div>{{ cdn_hit }}%</div>
+								</div>
+							</div>
+							<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneCH();});</script>
+						</div>
+					</div>
+
+					<div class="col m3 block-btn click-me wait" data-src="{{ urlSparklineCdnDelay }}">
+						<span>{{ 'QualityAssurance_CdnDelay'|translate }}</span>
+						<div class="widgetContent ng-scope">
+							<div class='overview-widget-cdn_delay-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
+								<div class='overview-widget-cdn_delay-counter' title="">
+									<div>{{ cdn_delay }} ms</div>
+								</div>
+							</div>
+							<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneCD();});</script>
 						</div>
 					</div>
 				</div>
@@ -152,10 +200,10 @@
 					<h3 class="title">{{ 'QualityAssurance_AudienceByCategory'|translate }}</h3>
 					{% include "@QualityAssurance/_cat.twig" %}
 				</div>
-				{#<div class="col m6 block-border">#}
-					{#<h3 class="title">{{ 'QualityAssurance_AudienceByConnection'|translate }}</h3>#}
-					{#{% include "@QualityAssurance/_con.twig" %}#}
-				{#</div>#}
+				<div class="col m6 block-border">
+					<h3 class="title">{{ 'QualityAssurance_AudienceByConnection'|translate }}</h3>
+					{% include "@QualityAssurance/_con.twig" %}
+				</div>
 			</div>
 		</div>
 	</div>

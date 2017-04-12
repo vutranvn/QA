@@ -68,10 +68,14 @@ class API extends \Piwik\Plugin\API
 //			}
 		}
 
-		$startup_time[] = rand(1,5);
+		$startup_time[] = rand(100,3000);
 		$buffer_time[]  = rand(1,100);
 		$bitrate[]      = rand(200,1000);
-		$play_requested[] = rand(500,3000);
+		$play_requested[]   = rand(500,3000);
+		$streaming_speed[]  = rand(500,3000);
+		$successful_attempt[] = rand(95,100);
+		$cdn_hit[]      = rand(95,100);
+		$cdn_delay[]    = rand(500,3000);
 
 		$formatter 	= new Formatter();
 		return array(
@@ -95,6 +99,22 @@ class API extends \Piwik\Plugin\API
 				'value'     => $play_requested?$formatter->getPrettyNumber( array_sum($play_requested)/count($play_requested) ):0,
 				'metrics'   => 'play_requested',
 			),
+            'streaming_speed'     => array(
+                'value'     => $streaming_speed?$formatter->getPrettyNumber( array_sum($streaming_speed)/count($streaming_speed) ):0,
+                'metrics'   => 'streaming_speed',
+            ),
+            'successful_attempt'     => array(
+                'value'     => $successful_attempt?$formatter->getPrettyNumber( array_sum($successful_attempt)/count($successful_attempt) ):0,
+                'metrics'   => 'successful_attempt',
+            ),
+            'cdn_hit'     => array(
+                'value'     => $cdn_hit?$formatter->getPrettyNumber( array_sum($cdn_hit)/count($cdn_hit) ):0,
+                'metrics'   => 'cdn_hit',
+            ),
+            'cdn_delay'     => array(
+                'value'     => $cdn_delay?$formatter->getPrettyNumber( array_sum($cdn_delay)/count($cdn_delay) ):0,
+                'metrics'   => 'cdn_delay',
+            ),
 			'refreshAfterXSecs' => 60,
 			'lastMinutes'       => $lastMinutes
 		);
@@ -138,12 +158,16 @@ class API extends \Piwik\Plugin\API
 			$rActions = json_decode($rActions, true);
 			if ( $rActions ) {
 				foreach ($rActions as $d => $action) {
-//					$startup_time[] = rand(1,5);
-//					$buffer_time[]  = rand(1,300);
-//					$bitrate[]      = rand(200,1000);
-//					$play_requested[] = rand(500,3000);
+//                    $startup_time[] = rand(100,3000);
+//                    $buffer_time[]  = rand(1,100);
+//                    $bitrate[]      = rand(200,1000);
+//                    $play_requested[]   = rand(500,3000);
+//                    $streaming_speed[]  = rand(500,3000);
+//                    $successful_attempt[] = rand(95,100);
+//                    $cdn_hit[]      = rand(95,100);
+//                    $cdn_delay[]    = rand(500,3000);
 					if ( strpos($columns,'startup_time') !== false ) {
-						$result[ $d ]['startup_time'] = rand( 1, 5 );
+						$result[ $d ]['startup_time'] = rand( 100, 3000 );
 					}
 					if ( strpos($columns,'rebuffer_time') !== false ) {
 						$result[ $d ]['rebuffer_time'] = rand( 1, 100 );
@@ -154,6 +178,18 @@ class API extends \Piwik\Plugin\API
 					if ( strpos($columns,'play_requested') !== false ) {
 							$result[ $d ]['play_requested'] = rand( 500, 3000 );
 					}
+                    if ( strpos($columns,'streaming_speed') !== false ) {
+                        $result[ $d ]['streaming_speed'] = rand( 500, 3000 );
+                    }
+                    if ( strpos($columns,'successful_attempt') !== false ) {
+                        $result[ $d ]['successful_attempt'] = rand( 95, 100 );
+                    }
+                    if ( strpos($columns,'cdn_hit') !== false ) {
+                        $result[ $d ]['cdn_hit'] = rand( 95, 100 );
+                    }
+                    if ( strpos($columns,'cdn_delay') !== false ) {
+                        $result[ $d ]['cdn_delay'] = rand( 500, 3000 );
+                    }
 //					if ( $action ) {
 //						foreach ($action as $r) {
 //
@@ -183,26 +219,36 @@ class API extends \Piwik\Plugin\API
 
 	public function getFor($idSite, $period, $date, $segment = false)
 	{
-		$idSites = $this->idSites;
-		$format = 'JSON';
-		$token_auth = Piwik::getCurrentUserTokenAuth();
-		$result = array();
-		foreach ($idSites as $id) {
-			$idSubtable = $this->callHttpApiRequest('Events.getCategory', $format, $token_auth, $id, $date, $period);
-			$idSubtable = json_decode($idSubtable, true);
-			if(isset($idSubtable['label']) == 'MediaFormat') {
-				$idSubtable = $idSubtable['idsubdatatable'];
-				$rByIdSite = $this->callHttpApiRequest('Events.getActionFromCategoryId', $format, $token_auth, $id, $date, $period, $idSubtable);
-				$rByIdSite = json_decode($rByIdSite, true);
+//		$idSites = $this->idSites;
+//		$format = 'JSON';
+//		$token_auth = Piwik::getCurrentUserTokenAuth();
+//		$result = array();
+//		foreach ($idSites as $id) {
+//			$idSubtable = $this->callHttpApiRequest('Events.getCategory', $format, $token_auth, $id, $date, $period);
+//			$idSubtable = json_decode($idSubtable, true);
+//			if(isset($idSubtable['label']) == 'MediaFormat') {
+//				$idSubtable = $idSubtable['idsubdatatable'];
+//				$rByIdSite = $this->callHttpApiRequest('Events.getActionFromCategoryId', $format, $token_auth, $id, $date, $period, $idSubtable);
+//				$rByIdSite = json_decode($rByIdSite, true);
+//
+//				foreach ($rByIdSite as $val) {
+//					$result[$val['label']] = $val['nb_visits'];
+//				}
+//			}
+//
+//		}
+//
+//		return DataTable::makeFromIndexedArray($result);
+        $metrics = array(
+            'mp4',
+            'u3m8',
+            'dash',
+            'flv',
+            'Others',
+        );
+        $result = $this->getDataExamples( $metrics, 0, 400 );
 
-				foreach ($rByIdSite as $val) {
-					$result[$val['label']] = $val['nb_visits'];
-				}
-			}
-
-		}
-
-		return DataTable::makeFromIndexedArray($result);
+        return $result;
 	}
 
 	public function getCon($idSite, $period, $date, $segment = false)
@@ -222,26 +268,35 @@ class API extends \Piwik\Plugin\API
 
 	public function getCat($idSite, $period, $date, $segment = false)
 	{
-		$idSites = $this->idSites;
-		$format = 'JSON';
-		$token_auth = Piwik::getCurrentUserTokenAuth();
-		$result = array();
-		foreach ($idSites as $id) {
-			$idSubtable = $this->callHttpApiRequest('Events.getCategory', $format, $token_auth, $id, $date, $period);
-			$idSubtable = json_decode($idSubtable, true);
-			if(isset($idSubtable['label']) == 'MediaContentCategories') {
-				$idSubtable = $idSubtable['idsubdatatable'];
-				$rByIdSite = $this->callHttpApiRequest('Events.getActionFromCategoryId', $format, $token_auth, $id, $date, $period, $idSubtable);
-				$rByIdSite = json_decode($rByIdSite, true);
+//		$idSites = $this->idSites;
+//		$format = 'JSON';
+//		$token_auth = Piwik::getCurrentUserTokenAuth();
+//		$result = array();
+//		foreach ($idSites as $id) {
+//			$idSubtable = $this->callHttpApiRequest('Events.getCategory', $format, $token_auth, $id, $date, $period);
+//			$idSubtable = json_decode($idSubtable, true);
+//			if(isset($idSubtable['label']) == 'MediaContentCategories') {
+//				$idSubtable = $idSubtable['idsubdatatable'];
+//				$rByIdSite = $this->callHttpApiRequest('Events.getActionFromCategoryId', $format, $token_auth, $id, $date, $period, $idSubtable);
+//				$rByIdSite = json_decode($rByIdSite, true);
+//
+//				foreach ($rByIdSite as $val) {
+//					$result[$val['label']] = $val['nb_visits'];
+//				}
+//			}
+//
+//		}
+//
+//		return DataTable::makeFromIndexedArray($result);
+        $metrics = array(
+            'News',
+            'Sport',
+            'Cartoon',
+            'Others',
+        );
+        $result = $this->getDataExamples( $metrics, 0, 400 );
 
-				foreach ($rByIdSite as $val) {
-					$result[$val['label']] = $val['nb_visits'];
-				}
-			}
-
-		}
-
-		return DataTable::makeFromIndexedArray($result);
+        return $result;
 	}
 
 	public function getCountry($idSite, $period, $date, $segment = false)

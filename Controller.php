@@ -45,7 +45,13 @@ class Controller extends \Piwik\Plugin\Controller
 
 		$view->urlSparklineAudience = $this->getUrlSparkline('getGraphOverview', array('columns' => array('audience')));
 		$view->urlSparklineStartup  = $this->getUrlSparkline('getGraphOverview', array('columns' => array('startup_time')));
+		$view->urlSparklineBitRate = $this->getUrlSparkline('getGraphOverview', array('columns' => array('bitrate')));
 		$view->urlSparklineRebuffer = $this->getUrlSparkline('getGraphOverview', array('columns' => array('rebuffer_time')));
+		$view->urlSparklinePlayRequested = $this->getUrlSparkline('getGraphOverview', array('columns' => array('play_requested')));
+		$view->urlSparklineStreamingSpeed = $this->getUrlSparkline('getGraphOverview', array('columns' => array('streaming_speed')));
+		$view->urlSparklineSuccessfulAttempt = $this->getUrlSparkline('getGraphOverview', array('columns' => array('successful_attempt')));
+		$view->urlSparklineCdnHit   = $this->getUrlSparkline('getGraphOverview', array('columns' => array('cdn_hit')));
+		$view->urlSparklineCdnDelay = $this->getUrlSparkline('getGraphOverview', array('columns' => array('cdn_delay')));
 
 		$view->lastMinutes  = $lastMinutes;
 		$view->refreshAfterXSecs = 5;
@@ -53,6 +59,7 @@ class Controller extends \Piwik\Plugin\Controller
 		$overview = array(
 			'audience',
 		);
+
 		$view->graphOverview = $this->getGraphOverview(array(), $overview);
 
 		$view->byFor    = $this->renderReport('getFor');
@@ -91,17 +98,37 @@ class Controller extends \Piwik\Plugin\Controller
 		$view->config->max_graph_elements   = 30;
 		$view->requestConfig->filter_sort_column = 'label';
 		$view->requestConfig->filter_sort_order  = 'asc';
+		if ( in_array('rebuffer_time', $selectableColumns) || in_array('successful_attempt', $selectableColumns) || in_array('cdn_hit', $selectableColumns) ) {
+			$view->config->y_axis_unit = ' %';
+		} elseif ( in_array('startup_time', $selectableColumns) || in_array('cdn_delay', $selectableColumns) ) {
+			$view->config->y_axis_unit = ' ms';
+		} elseif ( in_array('bit_rate', $selectableColumns) ) {
+			$view->config->y_axis_unit = ' kbit/s';
+
+		} elseif ( in_array('streaming_speed', $selectableColumns) ) {
+			$view->config->y_axis_unit = ' bps';
+		}
 		$view->requestConfig->disable_generic_filters=true;
 		$view->config->addTranslations(array(
 			'audience'      => Piwik::translate('QualityAssurance_Audience'),
 			'startup_time'  => Piwik::translate('QualityAssurance_StartupTime'),
 			'bit_rate'      => Piwik::translate('QualityAssurance_Bitrate'),
 			'rebuffer_time' => Piwik::translate('QualityAssurance_RebufferTime'),
+			'play_requested' => Piwik::translate('QualityAssurance_PlayRequested'),
+			'successful_attempt' => Piwik::translate('QualityAssurance_SuccessfulAttempt'),
+			'streaming_speed' => Piwik::translate('QualityAssurance_StreamingSpeed'),
+			'cdn_hit' => Piwik::translate('QualityAssurance_CdnHit'),
+			'cdn_delay' => Piwik::translate('QualityAssurance_CdnDelay'),
 		));
 
 		// Can not check empty so have to hardcode. F**k me!
 		$view->config->columns_to_display = $defaultColumns;
 
 		return $this->renderView($view);
+	}
+
+	public function getFor()
+	{
+		return $this->renderReport("getFor");
 	}
 }
