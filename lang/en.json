@@ -13,6 +13,11 @@
     "AudienceByConnection": "Audience size by connection speed",
     "AudienceByCategory": "Audience size by category",
     "AudienceByGeoraphy": "Audience size by georaphy",
-    "ConnectionSpeed": "Connection Speed"
+    "ConnectionSpeed": "Connection Speed",
+    "AudienceSize": "Audience Size",
+    "StartUpTime": "Start Up Time",
+    "Bitrate": "Bitrate",
+    "Buffering": "Buffering",
+    "PlayRequested": "Play Requested"
   }
 }

@@ -3,7 +3,7 @@
 		<div class="col s12 m12 l10 offset-l1 row-block row-one">
 				<div class="row btn-group text-center">
 					<div class="col m3 block-btn click-me" data-src="{{ urlSparklineAudience }}">
-						<span>Audience Size</span>
+						<span>{{ 'QualityAssurance_AudienceSize'|translate }}</span>
 						<div class="widgetContent ng-scope">
 							<div class='overview-widget-ausize-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
 								<div class='overview-widget-ausize-counter' title="{{ audience_size }}{{ ' per second'|translate(lastMinutes) | raw }}">
@@ -15,7 +15,7 @@
 					</div>
 
 					<div class="col m3 block-btn click-me wait" data-src="{{ urlSparklineStartup }}">
-						<span>Start Up Time</span>
+						<span>{{ 'QualityAssurance_StartUpTime'|translate }}</span>
 						<div class="widgetContent ng-scope">
 							<div class='overview-widget-startup_time-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
 								<div class='overview-widget-startup_time-counter' title="{{ startup_time }}{{ ' per second'|translate(lastMinutes) | raw }}">
@@ -26,24 +26,24 @@
 						</div>
 					</div>
 
-					{#<div class="col m3 block-btn btn-warning">#}
-						{#<span>Bitrate</span>#}
-						{#<div class="widgetContent ng-scope">#}
-							{#<div class='overview-widget-bitrate-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">#}
-								{#<div class='overview-widget-bitrate-counter' title="{{ bitrate }}{{ ' per second'|translate(lastMinutes) | raw }}">#}
-									{#<div>{{ bitrate }}</div>#}
-								{#</div>#}
-							{#</div>#}
-							{#<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneBR();});</script>#}
-						{#</div>#}
-					{#</div>#}
+					<div class="col m3 block-btn click-me wait">
+						<span>{{ 'QualityAssurance_Bitrate'|translate }}</span>
+						<div class="widgetContent ng-scope">
+							<div class='overview-widget-bitrate-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
+								<div class='overview-widget-bitrate-counter' title="{{ bitrate }}{{ ' per second'|translate(lastMinutes) | raw }}">
+									<div>{{ bitrate }} kbit/s</div>
+								</div>
+							</div>
+							<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneBR();});</script>
+						</div>
+					</div>
 
 					<div class="col m3 block-btn click-me wait" data-src="{{ urlSparklineRebuffer }}">
-						<span>Buffer Time</span>
+						<span>{{ 'QualityAssurance_Buffering'|translate }}</span>
 						<div class="widgetContent ng-scope">
 							<div class='overview-widget-buffer_time-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
 								<div class='overview-widget-buffer_time-counter' title="{{ buffer_time }}{{ ' per second'|translate(lastMinutes) | raw }}">
-									<div>{{ buffer_time }}</div>
+									<div>{{ buffer_time }}%</div>
 								</div>
 							</div>
 							<script type="text/javascript">$(document).ready(function () {require('piwik/QualityAssurance').initOverviewGetRowOneBT();});</script>
@@ -51,10 +51,10 @@
 					</div>
 
 					<div class="col m3 block-btn click-me wait" data-src="{{ urlSparklineRebuffer }}">
-						<span>Play Requested</span>
+						<span>{{ 'QualityAssurance_PlayRequested'|translate }}</span>
 						<div class="widgetContent ng-scope">
-							<div class='overview-widget-buffer_time-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
-								<div class='overview-widget-buffer_time-counter' title="{{ play_requested }}{{ ' per second'|translate(lastMinutes) | raw }}">
+							<div class='overview-widget-play_requested-widget' data-refreshAfterXSecs="{{ refreshAfterXSecs }}" data-last-minutes="{{ lastMinutes }}" data-translations="{{ translations|json_encode }}">
+								<div class='overview-widget-play_requested-counter' title="{{ play_requested }}{{ ' per second'|translate(lastMinutes) | raw }}">
 									<div>{{ play_requested }}</div>
 								</div>
 							</div>

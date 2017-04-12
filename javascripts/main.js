@@ -146,7 +146,7 @@ $(function () {
 
 			$('.overview-widget-bitrate-counter', element)
 				.attr('title', message)
-				.find('div').text(val);
+				.find('div').text(val+" kbit/s");
 			$('.overview-widget-bitrate-widget', element).attr('data-refreshafterxsecs', refreshAfterXSecs).attr('data-last-minutes', lastMinutes);
 
 			scheduleAnotherRequest();
@@ -203,8 +203,65 @@ $(function () {
 
 			$('.overview-widget-buffer_time-counter', element)
 				.attr('title', message)
-				.find('div').text(audienceSize);
+				.find('div').text(audienceSize+"%");
 			$('.overview-widget-buffer_time-widget', element).attr('data-refreshafterxsecs', refreshAfterXSecs).attr('data-last-minutes', lastMinutes);
+
+			scheduleAnotherRequest();
+		});
+		ajaxRequest.send(true);
+	};
+
+	var exports = require("piwik/QualityAssurance");
+	exports.initOverviewGetRowOneBT = function () {
+		$('.overview-widget-buffer_time-widget').each(function () {
+			var $this = $(this),
+				refreshAfterXSecs = $this.attr('data-refreshAfterXSecs');
+			if ($this.attr('data-inited')) {
+				return;
+			}
+
+			$this.attr('data-inited', 1);
+			setTimeout(function () {
+				refreshWidgetBT($this, refreshAfterXSecs);
+			}, refreshAfterXSecs * 1000);
+		});
+	};
+
+	var refreshWidgetPR = function (element, refreshAfterXSecs) {
+		// if the widget has been removed from the DOM, abort
+		if (!element.length || !$.contains(document, element[0])) {
+			return;
+		}
+		function scheduleAnotherRequest() {
+			setTimeout(function () {
+                refreshWidgetPR(element, refreshAfterXSecs);
+			}, refreshAfterXSecs * 1000);
+		}
+		if (Visibility.hidden()) {
+			scheduleAnotherRequest();
+			return;
+		}
+		var lastMinutes = $(element).attr('data-last-minutes') || 3, translations = JSON.parse($(element).attr('data-translations'));
+		var ajaxRequest = new ajaxHelper();
+		ajaxRequest.addParams({
+			module: 'API',
+			method: 'QualityAssurance.overviewGetRowOne',
+			format: 'json',
+			lastMinutes: lastMinutes,
+			metrics: 'play_requested',
+			refreshAfterXSecs: 5
+		}, 'get');
+		ajaxRequest.setFormat('json');
+		ajaxRequest.setCallback(function (data) {
+			var play_requested = data['play_requested']['value'];
+			var refreshafterxsecs = data['refreshAfterXSecs'];
+			var lastMinutes = data['lastMinutes'];
+			var message = data['play_requested']['metrics'];
+
+			$('.overview-widget-play_requested-counter', element)
+				.attr('title', message)
+				.find('div').text(play_requested);
+			$('.overview-widget-play_requested-widget', element).attr('data-refreshafterxsecs', refreshAfterXSecs).attr('data-last-minutes', lastMinutes);
 
 			scheduleAnotherRequest();
 		});

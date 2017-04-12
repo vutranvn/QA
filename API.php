@@ -40,24 +40,24 @@ class API extends \Piwik\Plugin\API
 			$uniqueVisitors = $this->callHttpApiRequest('Live.getCounters', $format, $token_auth, $idSite, '', '', $lastMinutes = 2);
 
 //			if ( !$eventsActions ) {
-				$eventsActions = json_decode($eventsActions, true);
-				foreach ($eventsActions as $action) {
-					if ( $action['label'] == 'start-delay' ) {
-						$startup_time[] = $action['avg_event_value'];
-					}
-
-					if ( $action['label'] == 'rebuffer-time' ) {
-						$buffer_time[] = $action['avg_event_value'];
-					}
-
-					if ( $action['label'] == 'bitrate' ) {
-						$bitrate[] = $action['avg_event_value'];
-					}
-
-					if ( $action['label'] == 'play' ) {
-						$play_requested[] = $action['avg_event_value'];
-					}
-				}
+//				$eventsActions = json_decode($eventsActions, true);
+//				foreach ($eventsActions as $action) {
+//					if ( $action['label'] == 'start-delay' ) {
+//						$startup_time[] = $action['avg_event_value'];
+//					}
+//
+//					if ( $action['label'] == 'rebuffer-time' ) {
+//						$buffer_time[] = $action['avg_event_value'];
+//					}
+//
+//					if ( $action['label'] == 'bitrate' ) {
+//						$bitrate[] = $action['avg_event_value'];
+//					}
+//
+//					if ( $action['label'] == 'play' ) {
+//						$play_requested[] = $action['avg_event_value'];
+//					}
+//				}
 //			}
 //			if ( !$uniqueVisitors ) {
 				$uniqueVisitors = json_decode($uniqueVisitors, true);
@@ -67,6 +67,12 @@ class API extends \Piwik\Plugin\API
 				}
 //			}
 		}
+
+		$startup_time[] = rand(1,5);
+		$buffer_time[]  = rand(1,100);
+		$bitrate[]      = rand(200,1000);
+		$play_requested[] = rand(500,3000);
+
 		$formatter 	= new Formatter();
 		return array(
 			'audience_size'     => array(
@@ -132,26 +138,42 @@ class API extends \Piwik\Plugin\API
 			$rActions = json_decode($rActions, true);
 			if ( $rActions ) {
 				foreach ($rActions as $d => $action) {
-					if ( $action ) {
-						foreach ($action as $r) {
-
-							if ($r['label'] == 'start-delay') {
-								if (isset($result[$d]['startup_time'])) {
-									$result[$d]['startup_time'] += (int)$action['avg_event_value'];
-								} else {
-									$result[$d]['startup_time']  = $action['avg_event_value'];
-								}
-							}
-
-							if ($r['label'] == 'rebuffer-time') {
-								if (isset($result[$d]['rebuffer_time'])) {
-									$result[$d]['rebuffer_time'] += (int)$action['avg_event_value'];
-								} else {
-									$result[$d]['rebuffer_time'] = $action['avg_event_value'];
-								}
-							}
-						}
+//					$startup_time[] = rand(1,5);
+//					$buffer_time[]  = rand(1,300);
+//					$bitrate[]      = rand(200,1000);
+//					$play_requested[] = rand(500,3000);
+					if ( strpos($columns,'startup_time') !== false ) {
+						$result[ $d ]['startup_time'] = rand( 1, 5 );
 					}
+					if ( strpos($columns,'rebuffer_time') !== false ) {
+						$result[ $d ]['rebuffer_time'] = rand( 1, 100 );
+					}
+					if ( strpos($columns,'bitrate') !== false ) {
+						$result[ $d ]['bitrate'] = rand( 200, 1000 );
+					}
+					if ( strpos($columns,'play_requested') !== false ) {
+							$result[ $d ]['play_requested'] = rand( 500, 3000 );
+					}
+//					if ( $action ) {
+//						foreach ($action as $r) {
+//
+//							if ($r['label'] == 'start-delay') {
+//								if (isset($result[$d]['startup_time'])) {
+//									$result[$d]['startup_time'] += (int)$action['avg_event_value'];
+//								} else {
+//									$result[$d]['startup_time']  = $action['avg_event_value'];
+//								}
+//							}
+//
+//							if ($r['label'] == 'rebuffer-time') {
+//								if (isset($result[$d]['rebuffer_time'])) {
+//									$result[$d]['rebuffer_time'] += (int)$action['avg_event_value'];
+//								} else {
+//									$result[$d]['rebuffer_time'] = $action['avg_event_value'];
+//								}
+//							}
+//						}
+//					}
 				}
 			}
 		}

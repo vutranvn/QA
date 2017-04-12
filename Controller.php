@@ -34,6 +34,10 @@ class Controller extends \Piwik\Plugin\Controller
 		$view->bitrate   		    = $audience_size['bitrate']['value'];
 		$view->buffer_time   		= $audience_size['buffer_time']['value'];
 		$view->play_requested   	= $audience_size['play_requested']['value'];
+		$view->streaming_speed   	= $audience_size['streaming_speed']['value'];
+		$view->successful_attempt   = $audience_size['successful_attempt']['value'];
+		$view->cdn_hit              = $audience_size['cdn_hit']['value'];
+		$view->cdn_delay            = $audience_size['cdn_delay']['value'];
 		$view->refreshAfterXSecs = 10;
 		$view->translations 	= array(
 			'audience_size' => Piwik::translate('QualityAssurance_Audience')
@@ -91,7 +95,7 @@ class Controller extends \Piwik\Plugin\Controller
 		$view->config->addTranslations(array(
 			'audience'      => Piwik::translate('QualityAssurance_Audience'),
 			'startup_time'  => Piwik::translate('QualityAssurance_StartupTime'),
-			// 'bit_rate'      => Piwik::translate('QualityAssurance_Bitrate'),
+			'bit_rate'      => Piwik::translate('QualityAssurance_Bitrate'),
 			'rebuffer_time' => Piwik::translate('QualityAssurance_RebufferTime'),
 		));
 
