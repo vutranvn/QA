@@ -1,7 +1,7 @@
 {
 	"name": "QA",
 	"description": "QualityAssurance",
-	"version": "3.0.2",
+	"version": "3.0.4",
 	"keywords": ["analyzer", "stream", "video", "audio"],
 	"homepage": "http://sbddigital.com",
 	"license": "GPL v3+",
